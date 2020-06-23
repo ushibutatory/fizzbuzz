@@ -7,19 +7,10 @@ using System.Reflection;
 
 namespace NabeAtsu.Core
 {
-    /// <summary>
-    /// プレイヤー
-    /// </summary>
     public class Player
     {
-        /// <summary>
-        /// 取りうる状態リスト
-        /// </summary>
         private readonly IEnumerable<IState> _states;
 
-        /// <summary>
-        /// 新しいインスタンスを生成します。
-        /// </summary>
         public Player()
         {
             // 状態リストを初期化
@@ -28,25 +19,20 @@ namespace NabeAtsu.Core
                         .Select(type => (IState)Activator.CreateInstance(type));
         }
 
-        /// <summary>
-        /// 指定された数値を答えます。
-        /// </summary>
-        /// <param name="value">数値</param>
-        /// <returns>答え</returns>
+        public Player(IEnumerable<IState> states)
+        {
+            _states = states;
+        }
+
         public Result Answer(BigInteger value)
         {
             // 状態を取得
             var state = _GetState(value);
 
-            // 結果を取得
+            // 変換して返す
             return state.Convert(value);
         }
 
-        /// <summary>
-        /// 状態を取得します。
-        /// </summary>
-        /// <param name="value">数値</param>
-        /// <returns>状態</returns>
         private IState _GetState(BigInteger value)
         {
             // 条件に当てはまる状態を取得する

@@ -5,9 +5,6 @@ using System.Text;
 
 namespace NabeAtsu.Core.States.Lv1
 {
-    /// <summary>
-    /// アホ状態クラス
-    /// </summary>
     public class FoolState : BaseState
     {
         /// <summary>
@@ -52,19 +49,9 @@ namespace NabeAtsu.Core.States.Lv1
             無量大数 = 17
         }
 
-        /// <summary>
-        /// 指定された数値が状態の条件に当てはまるかどうかを取得します。
-        /// </summary>
-        /// <param name="value">数値</param>
-        /// <returns>状態の条件に当てはまるかどうか</returns>
         public override bool IsApplied(BigInteger value)
             => (value % 3 == 0) || value.ToString().Contains("3");
 
-        /// <summary>
-        /// 数値を変換します。
-        /// </summary>
-        /// <param name="value">数値</param>
-        /// <returns>結果</returns>
         public override Result Convert(BigInteger value)
         {
             var text = new StringBuilder();
@@ -73,7 +60,7 @@ namespace NabeAtsu.Core.States.Lv1
             var digit = value.ToString().Length;
 
             // 小さい桁から4桁ごとに分割する
-            foreach (var block in StringUtility.SplitLength(value.ToString(), 4, StringUtility.SplitDirection.Back))
+            foreach (var block in StringUtility.SplitLength(value.ToString(), 4, StringUtility.SplitDirection.BackFromEnd))
             {
                 if (int.Parse(block) == 0)
                 {
@@ -83,41 +70,33 @@ namespace NabeAtsu.Core.States.Lv1
                 else
                 {
                     // 1文字ずつ変換
-                    foreach (var c in block)
+                    foreach (var @char in block)
                     {
                         // 1桁分の数字を取得
-                        var n = int.Parse(c.ToString());
+                        var number = int.Parse(@char.ToString());
 
                         // 数を変換
-                        text.Append(_ToFoolNumber(n, digit));
+                        text.Append(_ToFoolNumber(number, digit));
 
                         // 桁を変換
-                        text.Append(_ToFoolDigit(n, digit));
+                        text.Append(_ToFoolDigit(number, digit));
 
                         digit--;
                     }
                 }
             }
 
-            return new Result(this, value)
+            return new Result.Builder
             {
-                Text = text.ToString()
-            };
+                UsingState = this,
+                OriginalValue = value,
+                ConvertedText = text.ToString()
+            }.Build();
         }
 
-        /// <summary>
-        /// サブ状態リストを生成します。
-        /// </summary>
-        /// <returns>サブ状態リスト</returns>
         protected override IEnumerable<IState> _CreateSubStates()
             => new[] { new FoolState() };
 
-        /// <summary>
-        /// 数値をアホにします。
-        /// </summary>
-        /// <param name="number">元の数値</param>
-        /// <param name="digit">桁数</param>
-        /// <returns>アホな数値</returns>
         private string _ToFoolNumber(int number, int digit)
         {
             var result = "";
@@ -192,12 +171,6 @@ namespace NabeAtsu.Core.States.Lv1
             return result;
         }
 
-        /// <summary>
-        /// 桁をアホにします。
-        /// </summary>
-        /// <param name="number">元の数値</param>
-        /// <param name="digit">桁数</param>
-        /// <returns>アホな桁</returns>
         private string _ToFoolDigit(int number, int digit)
         {
             var result = "";
@@ -273,19 +246,9 @@ namespace NabeAtsu.Core.States.Lv1
             return result;
         }
 
-        /// <summary>
-        /// 単位の区切り種別を取得します。
-        /// </summary>
-        /// <param name="digit">単位</param>
-        /// <returns>単位の区切り種別</returns>
         private DigitPartType? _GetDigitPart(int digit)
             => StringUtility.ToEnum<DigitPartType>((digit % 4).ToString());
 
-        /// <summary>
-        /// 単位の段階種別を取得します。
-        /// </summary>
-        /// <param name="digit">単位</param>
-        /// <returns>単位の段階種別</returns>
         private DigitScaleType? _GetDigitScale(int digit)
             => StringUtility.ToEnum<DigitScaleType>((digit / 4).ToString());
     }

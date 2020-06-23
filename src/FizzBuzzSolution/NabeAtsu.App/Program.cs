@@ -1,4 +1,7 @@
 ﻿using NabeAtsu.Core;
+using NabeAtsu.Core.States;
+using NabeAtsu.Core.States.Lv0;
+using NabeAtsu.Core.States.Lv1;
 using NabeAtsu.Core.Utilities;
 using System;
 using System.Collections.Generic;
@@ -43,7 +46,7 @@ namespace NabeAtsu.App
                     var end = start + count;
 
                     // プレイヤーを生成
-                    var player = new Player();
+                    var player = new Player(new IState[] { new DefaultState(), new FoolState() });
 
                     for (var i = start; i < end; i++)
                     {
@@ -58,7 +61,7 @@ namespace NabeAtsu.App
                             var result = player.Answer(i);
 
                             // 出力
-                            Console.WriteLine(result.Text);
+                            Console.WriteLine(result.ConvertedText);
                         }
                     }
                 }

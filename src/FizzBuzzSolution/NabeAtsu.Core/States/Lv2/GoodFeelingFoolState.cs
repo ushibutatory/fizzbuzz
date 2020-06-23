@@ -4,34 +4,18 @@ using System.Numerics;
 
 namespace NabeAtsu.Core.States.Lv2
 {
-    /// <summary>
-    /// 気持ちいいアホ状態
-    /// </summary>
     public class GoodFeelingFoolState : BaseDuplicateState
     {
-        /// <summary>
-        /// アホ状態オブジェクト
-        /// </summary>
-        /// <remarks>
-        /// テキスト生成用
-        /// </remarks>
-        private FoolState _fool = new FoolState();
+        private readonly IState _fool = new FoolState();
 
-        /// <summary>
-        /// 数値を変換します。
-        /// </summary>
-        /// <param name="value">数値</param>
-        /// <returns>結果</returns>
         public override Result Convert(BigInteger value)
-            => new Result(this, value)
+            => new Result.Builder
             {
-                Text = _fool.Convert(value).Text + "(*´ω｀*)"
-            };
+                UsingState = this,
+                OriginalValue = value,
+                ConvertedText = _fool.Convert(value).ConvertedText + "(*´ω｀*)",
+            }.Build();
 
-        /// <summary>
-        /// サブ状態リストを生成します。
-        /// </summary>
-        /// <returns>サブ状態リスト</returns>
         protected override IEnumerable<IState> _CreateSubStates()
             => new IState[] {
                 new FoolState(),

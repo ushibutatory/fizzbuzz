@@ -3,9 +3,6 @@ using System.Numerics;
 
 namespace NabeAtsu.Core.States
 {
-    /// <summary>
-    /// 状態重複基底クラス
-    /// </summary>
     public abstract class BaseDuplicateState : BaseState
     {
         /// <summary>
