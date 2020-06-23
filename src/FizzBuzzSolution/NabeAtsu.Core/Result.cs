@@ -25,7 +25,7 @@ namespace NabeAtsu.Core
         public IState State { get; set; }
 
         /// <summary>
-        /// 適用した状態の方を取得します。
+        /// 適用した状態の型を取得します。
         /// </summary>
         public Type StateType => State.GetType();
 
