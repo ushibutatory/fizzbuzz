@@ -14,7 +14,8 @@ FizzBuzzを実装しました。
 
 ### 実行例
 
-(※貼り付ける)
+- [実行例1](./logs/NabeAtsu.log)
+- [実行例2](logs/NabeAtsu_BigNumber.log)
 
 ### 工夫したこと、苦労したこと
 
