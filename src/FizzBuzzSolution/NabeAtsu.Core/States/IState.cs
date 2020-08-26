@@ -5,12 +5,12 @@ namespace NabeAtsu.Core.States
 {
     public interface IState
     {
-        bool Enabled { get; }
+        public bool Enabled { get; }
 
-        IEnumerable<IState> SubStates { get; }
+        public IEnumerable<IState> SubStates { get; }
 
-        bool IsApplied(BigInteger value);
+        public bool IsApplied(BigInteger value);
 
-        Result Convert(BigInteger value);
+        public Result Convert(BigInteger value);
     }
 }
