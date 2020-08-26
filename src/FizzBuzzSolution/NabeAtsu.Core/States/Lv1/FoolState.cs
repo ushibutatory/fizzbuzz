@@ -224,6 +224,7 @@ namespace NabeAtsu.Core.States.Lv1
                     switch (number)
                     {
                         case 0:
+                            return "";
                         case 3:
                             return "びゃく";
                         case 6:
@@ -237,6 +238,7 @@ namespace NabeAtsu.Core.States.Lv1
                     switch (number)
                     {
                         case 0:
+                            return "";
                         case 3:
                             return "ぜん";
                         default:
