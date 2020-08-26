@@ -9,7 +9,7 @@ namespace FizzBuzz.App
             var start = 1;
             var end = 100;
 
-            foreach (var result in Counter.Count(start, end))
+            foreach (var result in Converter.CountUp(start, end))
             {
                 Console.WriteLine(result);
             }

@@ -9,6 +9,15 @@ namespace NabeAtsu.Core
 {
     public class Player
     {
+        /// <summary>
+        /// 最大値
+        /// </summary>
+        /// <remarks>
+        /// 無量大数は10の68乗なので
+        /// 10の73乗-1＝9999無量大数9999...9999
+        /// </remarks>
+        private static readonly BigInteger MaxValue = BigInteger.Pow(10, (68 + 4) + 1) - 1;
+
         private readonly IEnumerable<IState> _states;
 
         public Player()
@@ -22,6 +31,28 @@ namespace NabeAtsu.Core
         public Player(IEnumerable<IState> states)
         {
             _states = states;
+        }
+
+        public IEnumerable<Result> Answer(BigInteger start, BigInteger count)
+        {
+            var end = start + count;
+
+            for (var i = start; i < end; i++)
+            {
+                if (i > MaxValue)
+                {
+                    yield return new Result.Builder
+                    {
+                        UsingState = null,
+                        OriginalValue = i,
+                        ConvertedText = "これ以上は数えられません",
+                    }.Build();
+                }
+                else
+                {
+                    yield return Answer(i);
+                }
+            }
         }
 
         public Result Answer(BigInteger value)

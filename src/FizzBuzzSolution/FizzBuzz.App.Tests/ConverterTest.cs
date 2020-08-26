@@ -3,9 +3,10 @@ using Xunit;
 
 namespace FizzBuzz.App.Tests
 {
-    public class CounterTest
+    public class ConverterTest
     {
         [Theory]
+        [InlineData(0, "0")]
         [InlineData(1, "1")]
         [InlineData(2, "2")]
         [InlineData(3, "Fizz")]
@@ -23,8 +24,8 @@ namespace FizzBuzz.App.Tests
         [InlineData(15, "FizzBuzz")]
         public void FizzBuzz(int number, string result)
         {
-            var results = Counter.Count(number, number);
-            Assert.Equal(1, results.Count());
+            var results = Converter.CountUp(number, number);
+            Assert.Single(results);
             Assert.Equal(result, results.First());
         }
     }
