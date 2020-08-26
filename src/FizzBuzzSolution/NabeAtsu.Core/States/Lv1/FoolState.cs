@@ -204,6 +204,7 @@ namespace NabeAtsu.Core.States.Lv1
                     switch (number)
                     {
                         case 0:
+                            return "";
                         default:
                             switch (_GetDigitScale(digit))
                             {
