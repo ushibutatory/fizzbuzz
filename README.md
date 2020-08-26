@@ -15,7 +15,7 @@ FizzBuzzを実装しました。
 ### 実行例
 
 - [実行例1](./logs/NabeAtsu.log)
-- [実行例2](logs/NabeAtsu_BigNumber.log)
+- [実行例2](./logs/NabeAtsu_BigNumber.log)
 
 ### 工夫したこと、苦労したこと
 
@@ -37,6 +37,8 @@ FizzBuzzを実装しました。
     - 300 → さん**びゃく**
     - 600 → ろっ**ぴゃく**
 - 実装としては、ひたすらパターンマッチで対応しています。
+    - [位による発音違い](./src/FizzBuzzSolution/NabeAtsu.Core/States/Lv1/FoolState.cs#L100)
+    - [位の数値による発音違い](./src/FizzBuzzSolution/NabeAtsu.Core/States/Lv1/FoolState.cs#L174)
 
 ## 所感
 
