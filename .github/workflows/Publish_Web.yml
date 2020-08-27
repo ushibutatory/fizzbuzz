@@ -1,0 +1,25 @@
+name: Publish Web
+
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - src/**
+      - .github/workflows/**
+      - Dockerfile
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Deploy to Heroku
+      run: |
+        heroku container:login
+        heroku container:push web -a ${HEROKU_APP_NAME} --arg MY_NUGET_SOURCE=${MY_NUGET_SOURCE}
+        heroku container:release web -a ${HEROKU_APP_NAME}
+      env:
+        MY_NUGET_SOURCE: ${{ secrets.NUGET_SOURCE }}
+        HEROKU_APP_NAME: nabeatsu-dotnet
+        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
