@@ -3,15 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30204.135
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FizzBuzz.App", "FizzBuzz.App\FizzBuzz.App.csproj", "{E07F6D1A-1B8E-4ED9-8FFF-892F12465D05}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FizzBuzz.App", "FizzBuzz.App\FizzBuzz.App.csproj", "{E07F6D1A-1B8E-4ED9-8FFF-892F12465D05}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FizzBuzz.App.Tests", "FizzBuzz.App.Tests\FizzBuzz.App.Tests.csproj", "{50F50219-3732-45AC-B931-138E8811B671}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FizzBuzz.App.Tests", "FizzBuzz.App.Tests\FizzBuzz.App.Tests.csproj", "{50F50219-3732-45AC-B931-138E8811B671}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NabeAtsu.App", "NabeAtsu.App\NabeAtsu.App.csproj", "{7E40C883-F673-4196-B99F-7E0D2D06A8A7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NabeAtsu.App", "NabeAtsu.App\NabeAtsu.App.csproj", "{7E40C883-F673-4196-B99F-7E0D2D06A8A7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NabeAtsu.Core", "NabeAtsu.Core\NabeAtsu.Core.csproj", "{E62A01E9-9DD0-463D-AA00-72DDA9BF888E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NabeAtsu.Core", "NabeAtsu.Core\NabeAtsu.Core.csproj", "{E62A01E9-9DD0-463D-AA00-72DDA9BF888E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NabeAtsu.Core.Tests", "NabeAtsu.Core.Tests\NabeAtsu.Core.Tests.csproj", "{1E0D105B-41B7-40F8-834C-6FED4F580A6B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NabeAtsu.Core.Tests", "NabeAtsu.Core.Tests\NabeAtsu.Core.Tests.csproj", "{1E0D105B-41B7-40F8-834C-6FED4F580A6B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NabeAtsu.Web", "NabeAtsu.Web\NabeAtsu.Web.csproj", "{78E1350C-8B19-4F80-93A9-039B8B045D74}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{1E0D105B-41B7-40F8-834C-6FED4F580A6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1E0D105B-41B7-40F8-834C-6FED4F580A6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1E0D105B-41B7-40F8-834C-6FED4F580A6B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78E1350C-8B19-4F80-93A9-039B8B045D74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78E1350C-8B19-4F80-93A9-039B8B045D74}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78E1350C-8B19-4F80-93A9-039B8B045D74}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78E1350C-8B19-4F80-93A9-039B8B045D74}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
