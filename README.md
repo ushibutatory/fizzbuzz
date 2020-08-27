@@ -14,7 +14,7 @@ FizzBuzzを実装しました。
 
 ### 実行例
 
-```sh
+```console
 # NabeAtsu.App.exe run -?
 
 Usage: NabeAtsu.App run [arguments] [options]
@@ -27,7 +27,7 @@ Options:
   -?|-h|--help  Show help information
 ```
 
-```sh
+```console
 # NabeAtsu.App.exe run 1 15
 1
 2
@@ -46,7 +46,7 @@ Options:
 わおーーーーーーーん！U゜ｪ。U
 ```
 
-```sh
+```console
 # NabeAtsu.App.exe run 1000000001 15
 1000000001
 じゅうおくにぃ
