@@ -14,8 +14,56 @@ FizzBuzzを実装しました。
 
 ### 実行例
 
-- [実行例1](./logs/NabeAtsu.log)
-- [実行例2](./logs/NabeAtsu_BigNumber.log)
+```sh
+# NabeAtsu.App.exe run -?
+
+Usage: NabeAtsu.App run [arguments] [options]
+
+Arguments:
+  start  開始する数値
+  count  数える数
+
+Options:
+  -?|-h|--help  Show help information
+```
+
+```sh
+# NabeAtsu.App.exe run 1 15
+1
+2
+さぁん
+4
+わん！U^ｪ^U
+ろぉく
+7
+8
+きゅう
+わん！U^ｪ^U
+11
+じゅうにぃ
+じゅうさぁん
+14
+わおーーーーーーーん！U゜ｪ。U
+```
+
+```sh
+# NabeAtsu.App.exe run 1000000001 15
+1000000001
+じゅうおくにぃ
+じゅうおくさぁん
+1000000004
+わおーーーーーーーん！U゜ｪ。U
+1000000006
+1000000007
+じゅうおくはぁち
+1000000009
+わん！U^ｪ^U
+じゅうおくじゅういち
+1000000012
+じゅうおくじゅうさぁん
+じゅうおくじゅうよぉん
+わん！U^ｪ^U
+```
 
 ### 工夫したこと、苦労したこと
 
