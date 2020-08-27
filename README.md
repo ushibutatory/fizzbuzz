@@ -12,6 +12,14 @@ FizzBuzzを実装しました。
 
 30に入った時の怒涛のたたみかけが好きです。
 
+## Web版
+
+ASP.NET Coreで実装し、Herokuにデプロイしています。
+
+[https://nabeatsu-dotnet.herokuapp.com/](https://nabeatsu-dotnet.herokuapp.com/)
+
+## コンソールアプリ版
+
 ### 実行例
 
 ```console
