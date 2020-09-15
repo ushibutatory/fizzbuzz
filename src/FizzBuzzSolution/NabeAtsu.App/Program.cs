@@ -42,7 +42,9 @@ namespace NabeAtsu.App
                     var endValue = startValue + countValue;
 
                     // プレイヤーを生成
-                    var player = new Player();
+                    var player = new Player.Builder()
+                        .AutoSetup()
+                        .Build();
 
                     var results = player.Answer(startValue, countValue);
 

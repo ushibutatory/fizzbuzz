@@ -14,51 +14,100 @@ namespace NabeAtsu.Core.Tests
         private static IState _Dog => new DogState();
         private static IState _FoolDog => new FoolDogState();
 
-        public static IEnumerable<object[]> NabeAtsuPatterns() => new[]
-            {
-                new object[]{ 1, _Default },
-                new object[]{ 2, _Default },
-                new object[]{ 3, _Fool },
-                new object[]{ 4, _Default },
-                new object[]{ 5, _Dog },
-                new object[]{ 6, _Fool },
-                new object[]{ 7, _Default },
-                new object[]{ 8, _Default },
-                new object[]{ 9, _Fool },
-                new object[]{ 10, _Dog },
-                new object[]{ 11, _Default },
-                new object[]{ 12, _Fool },
-                new object[]{ 13, _Fool },
-                new object[]{ 14, _Default },
-                new object[]{ 15, _FoolDog },
-            };
+        public static TheoryData<int, IState> JudgeStatePatterns => new TheoryData<int, IState>
+        {
+            { 1, _Default },
+            { 2, _Default },
+            { 3, _Fool },
+            { 4, _Default },
+            { 5, _Dog },
+            { 6, _Fool },
+            { 7, _Default },
+            { 8, _Default },
+            { 9, _Fool },
+            { 10, _Dog },
+            { 11, _Default },
+            { 12, _Fool },
+            { 13, _Fool },
+            { 14, _Default },
+            { 15, _FoolDog },
+        };
 
         [Theory]
-        [MemberData(nameof(NabeAtsuPatterns))]
-        public void NabeAtsu(int n, IState useState)
+        [MemberData(nameof(JudgeStatePatterns))]
+        public void JudgeState(int n, IState expected)
         {
-            var player = new Player();
-            var result = player.Answer(n);
-            // TODO: もうちょっといい判定方法ありそう……
-            Assert.True(useState.GetType() == result.UsingState.GetType());
+            var player = new Player.Builder()
+                .AutoSetup()
+                .Build();
+
+            var actual = player.JudgeState(n);
+            Assert.True(expected.GetType() == actual.GetType());
         }
 
-        [Theory]
-        [InlineData(63, "ろくじゅうさぁん")]
-        [InlineData(83, "はちじゅうさぁん")]
-        [InlineData(103, "ひゃくさぁん")]
-        [InlineData(303, "さんびゃくさぁん")]
-        [InlineData(603, "ろっぴゃくさぁん")]
-        [InlineData(803, "はっぴゃくさぁん")]
-        [InlineData(1003, "せんさぁん")]
-        [InlineData(3003, "さんぜんさぁん")]
-        [InlineData(10003, "いちまんさぁん")]
-        [InlineData(100003, "じゅうまんさぁん")]
-        public void KanaPatterns(int n, string expected)
+        public static TheoryData<int, string> ConvertText_FoolPatterns => new TheoryData<int, string>
         {
-            var player = new Player();
-            var result = player.Answer(n);
-            Assert.Equal(expected, result.ConvertedText);
+            { 63, "ろくじゅうさぁん" },
+            { 63, "ろくじゅうさぁん" },
+            { 83, "はちじゅうさぁん" },
+            { 103, "ひゃくさぁん" },
+            { 303, "さんびゃくさぁん" },
+            { 603, "ろっぴゃくさぁん" },
+            { 803, "はっぴゃくさぁん" },
+            { 1003, "せんさぁん" },
+            { 3003, "さんぜんさぁん" },
+            { 10003, "いちまんさぁん" },
+            { 100003, "じゅうまんさぁん" },
+        };
+
+        [Theory]
+        [MemberData(nameof(ConvertText_FoolPatterns))]
+        public void ConvertText_Fool(int n, string expected)
+        {
+            var player = new Player.Builder()
+                .AutoSetup()
+                .Build();
+
+            var actual = player.Answer(n);
+            Assert.Equal(expected, actual.ConvertedText);
+        }
+
+        public static TheoryData<int, string> ConvertText_DogPatterns => new TheoryData<int, string>
+        {
+            { 5, "わん！U^ｪ^U" },
+            { 10, "わん！U^ｪ^U" },
+        };
+
+        [Theory]
+        [MemberData(nameof(ConvertText_DogPatterns))]
+        public void ConvertText_Dog(int n, string expected)
+        {
+            var player = new Player.Builder()
+                .AutoSetup()
+                .Build();
+
+            var actual = player.Answer(n);
+            Assert.Equal(expected, actual.ConvertedText);
+        }
+
+        public static TheoryData<int, string> ConvertText_FoolDogPatterns => new TheoryData<int, string>
+        {
+            { 15, "じゅうごゎぉーん！" },
+            { 30, "さんじゅゎぉーん！" },
+            { 150, "ひゃくごじゅゎぉーん！" },
+            { 300, "さんびゃくゎぉーん！" },
+        };
+
+        [Theory]
+        [MemberData(nameof(ConvertText_FoolDogPatterns))]
+        public void ConvertText_FoolDog(int n, string expected)
+        {
+            var player = new Player.Builder()
+                .AutoSetup()
+                .Build();
+
+            var actual = player.Answer(n);
+            Assert.Equal(expected, actual.ConvertedText);
         }
     }
 }

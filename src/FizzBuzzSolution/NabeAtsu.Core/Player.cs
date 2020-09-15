@@ -26,15 +26,14 @@ namespace NabeAtsu.Core
         /// </summary>
         private readonly IEnumerable<IState> _states;
 
-        public Player()
-        {
-            // 状態リストを初期化
-            _states = Assembly.GetExecutingAssembly().GetTypes()
-                        .Where(type => !type.IsAbstract && type.GetInterfaces().Contains(typeof(IState)))
-                        .Select(type => (IState)Activator.CreateInstance(type));
-        }
-
-        public Player(IEnumerable<IState> states)
+        /// <summary>
+        /// 新しいインスタンスを生成します。
+        /// </summary>
+        /// <param name="states">使用する状態リスト</param>
+        /// <remarks>
+        /// Builder経由で生成するため private とする。
+        /// </remarks>
+        private Player(IEnumerable<IState> states)
         {
             _states = states;
         }
@@ -75,18 +74,18 @@ namespace NabeAtsu.Core
         public Result Answer(BigInteger value)
         {
             // 状態を取得
-            var state = _GetState(value);
+            var state = JudgeState(value);
 
             // 変換して返す
             return state.Convert(value);
         }
 
-        private IState _GetState(BigInteger value)
         /// <summary>
         /// どの状態に当てはまるかを判定します。
         /// </summary>
         /// <param name="value">数値</param>
         /// <returns></returns>
+        public IState JudgeState(BigInteger value)
         {
             // 条件に当てはまる状態を取得する
             var states = _states
@@ -99,6 +98,29 @@ namespace NabeAtsu.Core
 
             // 最も優先度の高い状態（＝子状態が多いほど優先度が高い）を取得する
             return states.First();
+        }
+
+        public class Builder
+        {
+            private IList<IState> States = new IState[];
+
+            public Builder AddState(IState state)
+            {
+                States.Add(state);
+                return this;
+            }
+
+            public Builder AutoSetup()
+            {
+                // 状態リストを初期化
+                States = Assembly.GetExecutingAssembly().GetTypes()
+                            .Where(type => !type.IsAbstract && type.GetInterfaces().Contains(typeof(IState)))
+                            .Select(type => (IState)Activator.CreateInstance(type))
+                            .ToList();
+                return this;
+            }
+
+            public Player Build() => new Player(States.Distinct());
         }
     }
 }
