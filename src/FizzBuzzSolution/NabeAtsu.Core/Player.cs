@@ -7,6 +7,9 @@ using System.Reflection;
 
 namespace NabeAtsu.Core
 {
+    /// <summary>
+    /// プレイヤークラス
+    /// </summary>
     public class Player
     {
         /// <summary>
@@ -18,6 +21,9 @@ namespace NabeAtsu.Core
         /// </remarks>
         private static readonly BigInteger MaxValue = BigInteger.Pow(10, (68 + 4) + 1) - 1;
 
+        /// <summary>
+        /// 使用する状態リスト
+        /// </summary>
         private readonly IEnumerable<IState> _states;
 
         public Player()
@@ -33,6 +39,12 @@ namespace NabeAtsu.Core
             _states = states;
         }
 
+        /// <summary>
+        /// 数値をカウントしていきます。
+        /// </summary>
+        /// <param name="start">開始数</param>
+        /// <param name="count">数える数</param>
+        /// <returns>結果リスト</returns>
         public IEnumerable<Result> Answer(BigInteger start, BigInteger count)
         {
             var end = start + count;
@@ -55,6 +67,11 @@ namespace NabeAtsu.Core
             }
         }
 
+        /// <summary>
+        /// 数値を変換します。
+        /// </summary>
+        /// <param name="value">数値</param>
+        /// <returns>結果</returns>
         public Result Answer(BigInteger value)
         {
             // 状態を取得
@@ -65,6 +82,11 @@ namespace NabeAtsu.Core
         }
 
         private IState _GetState(BigInteger value)
+        /// <summary>
+        /// どの状態に当てはまるかを判定します。
+        /// </summary>
+        /// <param name="value">数値</param>
+        /// <returns></returns>
         {
             // 条件に当てはまる状態を取得する
             var states = _states
