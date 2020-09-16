@@ -1,9 +1,8 @@
 ﻿using NabeAtsu.Core.States;
-using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Numerics;
-using System.Reflection;
 
 namespace NabeAtsu.Core
 {
@@ -89,38 +88,40 @@ namespace NabeAtsu.Core
         {
             // 条件に当てはまる状態を取得する
             var states = _states
-                .Where(state => state.IsApplied(value) && state.Enabled)
-                .OrderByDescending(state => state.SubStates.Count());
+                .Where(state => state.Enabled && state.IsSatisfied(value))
+                .OrderByDescending(state => state.Level);
 
             if (states.Count() == 0)
                 // 当てはまる状態がなかった
                 throw new StateNotFoundException(_states, value);
 
-            // 最も優先度の高い状態（＝子状態が多いほど優先度が高い）を取得する
+            // 最も優先度の高い状態を取得する
             return states.First();
         }
 
         public class Builder
         {
-            private IList<IState> States = new IState[];
+            private ICollection<IState> _States = new Collection<IState>();
 
             public Builder AddState(IState state)
             {
-                States.Add(state);
+                _States.Add(state);
                 return this;
             }
 
-            public Builder AutoSetup()
+            public Player AutoBuild()
             {
-                // 状態リストを初期化
-                States = Assembly.GetExecutingAssembly().GetTypes()
-                            .Where(type => !type.IsAbstract && type.GetInterfaces().Contains(typeof(IState)))
-                            .Select(type => (IState)Activator.CreateInstance(type))
-                            .ToList();
-                return this;
+                _States = new IState[]
+                {
+                    new States.Lv0.Default.DefaultState.Builder().Build(),
+                    new States.Lv1.Dog.DogState.Builder().Build(),
+                    new States.Lv1.Fool.FoolState.Builder().Build(),
+                    new States.Lv2.FoolDog.FoolDogState.Builder().Build(),
+                };
+                return Build();
             }
 
-            public Player Build() => new Player(States.Distinct());
+            public Player Build() => new Player(_States.Distinct());
         }
     }
 }

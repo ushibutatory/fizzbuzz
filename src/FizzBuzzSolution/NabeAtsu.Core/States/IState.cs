@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Numerics;
+﻿using System.Numerics;
 
 namespace NabeAtsu.Core.States
 {
@@ -9,6 +8,11 @@ namespace NabeAtsu.Core.States
     public interface IState
     {
         /// <summary>
+        /// 状態のレベル
+        /// </summary>
+        public int Level { get; }
+
+        /// <summary>
         /// 有効かどうか
         /// </summary>
         /// <remarks>
@@ -17,15 +21,10 @@ namespace NabeAtsu.Core.States
         public bool Enabled { get; }
 
         /// <summary>
-        /// 内包する状態
-        /// </summary>
-        public IEnumerable<IState> SubStates { get; }
-
-        /// <summary>
         /// 条件に当てはまるかどうか
         /// </summary>
         /// <param name="value">数値</param>
-        public bool IsApplied(BigInteger value);
+        public bool IsSatisfied(BigInteger value);
 
         /// <summary>
         /// 数値を文字列に変換します。

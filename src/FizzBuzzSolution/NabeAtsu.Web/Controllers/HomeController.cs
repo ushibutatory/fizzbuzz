@@ -28,8 +28,7 @@ namespace NabeAtsu.Web.Controllers
         public IActionResult Submit(IndexViewModel form)
         {
             var player = new Player.Builder()
-                .AutoSetup()
-                .Build();
+                .AutoBuild();
 
             var results = player.Answer(form.Start, form.Count);
 

@@ -1,36 +1,55 @@
 using NabeAtsu.Core.States;
-using NabeAtsu.Core.States.Lv0;
-using NabeAtsu.Core.States.Lv1;
-using NabeAtsu.Core.States.Lv2;
-using System.Collections.Generic;
+using System.Linq;
 using Xunit;
 
 namespace NabeAtsu.Core.Tests
 {
     public class PlayerTest
     {
-        private static IState _Default => new DefaultState();
-        private static IState _Fool => new FoolState();
-        private static IState _Dog => new DogState();
-        private static IState _FoolDog => new FoolDogState();
+        private static class State
+        {
+            public static IState Default => new States.Lv0.Default.DefaultState.Builder()
+                .Build();
+
+            public static IState Fool => new States.Lv1.Fool.FoolState.Builder()
+                .Build();
+
+            public static IState Dog => new States.Lv1.Dog.DogState.Builder()
+                .Build();
+
+            public static IState FoolDog => new States.Lv2.FoolDog.FoolDogState.Builder()
+                .Build();
+        }
+
+        [Fact]
+        public void PlainPlayer()
+        {
+            var player = new Player.Builder()
+                .AddState(State.Default)
+                .Build();
+
+            var results = Enumerable.Range(1, 100).Select(n => player.Answer(n));
+
+            Assert.Empty(results.Where(result => result.OriginalValue.ToString() != result.ConvertedText));
+        }
 
         public static TheoryData<int, IState> JudgeStatePatterns => new TheoryData<int, IState>
         {
-            { 1, _Default },
-            { 2, _Default },
-            { 3, _Fool },
-            { 4, _Default },
-            { 5, _Dog },
-            { 6, _Fool },
-            { 7, _Default },
-            { 8, _Default },
-            { 9, _Fool },
-            { 10, _Dog },
-            { 11, _Default },
-            { 12, _Fool },
-            { 13, _Fool },
-            { 14, _Default },
-            { 15, _FoolDog },
+            { 1, State.Default },
+            { 2, State.Default },
+            { 3, State.Fool },
+            { 4, State.Default },
+            { 5, State.Dog },
+            { 6, State.Fool },
+            { 7, State.Default },
+            { 8, State.Default },
+            { 9, State.Fool },
+            { 10, State.Dog },
+            { 11, State.Default },
+            { 12, State.Fool },
+            { 13, State.Fool },
+            { 14, State.Default },
+            { 15, State.FoolDog },
         };
 
         [Theory]
@@ -38,8 +57,7 @@ namespace NabeAtsu.Core.Tests
         public void JudgeState(int n, IState expected)
         {
             var player = new Player.Builder()
-                .AutoSetup()
-                .Build();
+                .AutoBuild();
 
             var actual = player.JudgeState(n);
             Assert.True(expected.GetType() == actual.GetType());
@@ -65,8 +83,7 @@ namespace NabeAtsu.Core.Tests
         public void ConvertText_Fool(int n, string expected)
         {
             var player = new Player.Builder()
-                .AutoSetup()
-                .Build();
+                .AutoBuild();
 
             var actual = player.Answer(n);
             Assert.Equal(expected, actual.ConvertedText);
@@ -83,8 +100,7 @@ namespace NabeAtsu.Core.Tests
         public void ConvertText_Dog(int n, string expected)
         {
             var player = new Player.Builder()
-                .AutoSetup()
-                .Build();
+                .AutoBuild();
 
             var actual = player.Answer(n);
             Assert.Equal(expected, actual.ConvertedText);
@@ -103,8 +119,7 @@ namespace NabeAtsu.Core.Tests
         public void ConvertText_FoolDog(int n, string expected)
         {
             var player = new Player.Builder()
-                .AutoSetup()
-                .Build();
+                .AutoBuild();
 
             var actual = player.Answer(n);
             Assert.Equal(expected, actual.ConvertedText);
