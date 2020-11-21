@@ -17,13 +17,13 @@ namespace NabeAtsu.Core.Utilities
                 ? (T?)result
                 : null;
 
-        public enum SplitDirection
+        public enum Direction
         {
             ForwardFromStart,
             BackFromEnd
         }
 
-        public static List<string> SplitLength(string text, int length, SplitDirection direction = SplitDirection.ForwardFromStart)
+        public static List<string> SplitLength(string text, int length, Direction direction = Direction.ForwardFromStart)
         {
             var result = new List<string>();
 
@@ -31,7 +31,7 @@ namespace NabeAtsu.Core.Utilities
 
             switch (direction)
             {
-                case SplitDirection.ForwardFromStart:
+                case Direction.ForwardFromStart:
                     // 前から数える
                     for (var i = 0; i < text.Length; i++)
                     {
@@ -49,7 +49,7 @@ namespace NabeAtsu.Core.Utilities
                     }
                     break;
 
-                case SplitDirection.BackFromEnd:
+                case Direction.BackFromEnd:
                     // 後ろから数える
                     for (var i = text.Length - 1; i >= 0; i--)
                     {

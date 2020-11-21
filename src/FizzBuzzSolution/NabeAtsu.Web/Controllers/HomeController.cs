@@ -27,7 +27,9 @@ namespace NabeAtsu.Web.Controllers
 
         public IActionResult Submit(IndexViewModel form)
         {
-            var player = new Player();
+            var player = new Player.Builder()
+                .AutoBuild();
+
             var results = player.Answer(form.Start, form.Count);
 
             return View("Index", new IndexViewModel
