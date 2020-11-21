@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 
 namespace NabeAtsu.Core.States.Lv1.Fool
 {
@@ -44,24 +45,11 @@ namespace NabeAtsu.Core.States.Lv1.Fool
                 {
                     case 0: return "";
                     case 1:
-                        switch (digitPart)
+                        return digitPart switch
                         {
-                            case Consts.DigitPartType.One:
-                                switch (Consts.GetDigitScale(digit))
-                                {
-                                    case Consts.DigitScaleType.京:
-                                    case Consts.DigitScaleType.兆:
-                                    case Consts.DigitScaleType.澗:
-                                    case Consts.DigitScaleType.正:
-                                    case Consts.DigitScaleType.載:
-                                        return "いっ";
-                                    default:
-                                        return "いち";
-                                }
-
-                            default:
-                                return "";
-                        }
+                            Consts.DigitPartType.One => _IsSokuon(digit) ? "いっ" : "いち",
+                            _ => "",
+                        };
                     case 2: return "に";
                     case 3: return "さん";
                     case 4: return "よん";
@@ -109,6 +97,27 @@ namespace NabeAtsu.Core.States.Lv1.Fool
         private readonly ConvertDigitPartDelegate ConvertDigitPart_Ten;
         private readonly ConvertDigitPartDelegate ConvertDigitPart_Hundred;
         private readonly ConvertDigitPartDelegate ConvertDigitPart_Thousand;
+
+        /// <summary>
+        /// 単位が促音でつながるかどうかを返します。
+        /// </summary>
+        /// <param name="digit"></param>
+        /// <returns></returns>
+        private static bool _IsSokuon(int digit)
+        {
+            switch (Consts.GetDigitScale(digit))
+            {
+                case Consts.DigitScaleType.兆:
+                case Consts.DigitScaleType.京:
+                case Consts.DigitScaleType.溝:
+                case Consts.DigitScaleType.澗:
+                case Consts.DigitScaleType.正:
+                case Consts.DigitScaleType.載:
+                    return true;
+                default:
+                    return false;
+            }
+        }
 
         public class Builder
         {
@@ -158,24 +167,11 @@ namespace NabeAtsu.Core.States.Lv1.Fool
 
             public ConvertDigitPartDelegate ConvertDigitPart_Ten = (value, number, digit) =>
             {
-                switch (number)
+                return number switch
                 {
-                    case 0:
-                        return "";
-                    default:
-                        switch (Consts.GetDigitScale(digit))
-                        {
-                            case Consts.DigitScaleType.兆:
-                            case Consts.DigitScaleType.京:
-                            case Consts.DigitScaleType.溝:
-                            case Consts.DigitScaleType.澗:
-                            case Consts.DigitScaleType.正:
-                            case Consts.DigitScaleType.載:
-                                return "じゅっ";
-                            default:
-                                return "じゅう";
-                        }
-                }
+                    0 => "",
+                    _ => _IsSokuon(digit) ? "じゅっ" : "じゅう",
+                };
             };
 
             public ConvertDigitPartDelegate ConvertDigitPart_Hundred = (value, number, digit) =>
@@ -185,12 +181,12 @@ namespace NabeAtsu.Core.States.Lv1.Fool
                     case 0:
                         return "";
                     case 3:
-                        return "びゃく";
+                        return _IsSokuon(digit) ? "びゃっ" : "びゃく";
                     case 6:
                     case 8:
-                        return "ぴゃく";
+                        return _IsSokuon(digit) ? "ぴゃっ" : "ぴゃく";
                     default:
-                        return "ひゃく";
+                        return _IsSokuon(digit) ? "ひゃっ" : "ひゃく";
                 };
             };
 

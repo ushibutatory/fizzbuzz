@@ -1,5 +1,6 @@
 using NabeAtsu.Core.States;
 using System.Linq;
+using System.Numerics;
 using Xunit;
 
 namespace NabeAtsu.Core.Tests
@@ -63,7 +64,7 @@ namespace NabeAtsu.Core.Tests
             Assert.True(expected.GetType() == actual.GetType());
         }
 
-        public static TheoryData<int, string> ConvertText_FoolPatterns => new TheoryData<int, string>
+        public static TheoryData<BigInteger, string> ConvertText_FoolPatterns => new TheoryData<BigInteger, string>
         {
             { 63, "ろくじゅうさぁん" },
             { 63, "ろくじゅうさぁん" },
@@ -76,11 +77,12 @@ namespace NabeAtsu.Core.Tests
             { 3003, "さんぜんさぁん" },
             { 10003, "いちまんさぁん" },
             { 100003, "じゅうまんさぁん" },
+            { 1000000000000000003, "ひゃっけぇーさぁん" },
         };
 
         [Theory]
         [MemberData(nameof(ConvertText_FoolPatterns))]
-        public void ConvertText_Fool(int n, string expected)
+        public void ConvertText_Fool(BigInteger n, string expected)
         {
             var player = new Player.Builder()
                 .AutoBuild();
