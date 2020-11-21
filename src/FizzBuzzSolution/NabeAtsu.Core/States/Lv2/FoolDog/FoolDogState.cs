@@ -11,10 +11,7 @@ namespace NabeAtsu.Core.States.Lv2.FoolDog
 
         public override int Level => 2;
 
-        public override bool IsSatisfied(BigInteger value)
-        {
-            return _Fool.IsSatisfied(value) && _Dog.IsSatisfied(value);
-        }
+        public override bool IsSatisfied(BigInteger value) => _Fool.IsSatisfied(value) && _Dog.IsSatisfied(value);
 
         public override Result Convert(BigInteger value) => new Result.Builder
         {
