@@ -1,5 +1,6 @@
 ﻿using NabeAtsu.Core.States.Lv1.Dog;
 using NabeAtsu.Core.States.Lv1.Fool;
+using System;
 using System.Numerics;
 
 namespace NabeAtsu.Core.States.Lv2.FoolDog
@@ -25,6 +26,14 @@ namespace NabeAtsu.Core.States.Lv2.FoolDog
         private readonly IState _Fool = new FoolState.Builder()
             .Setup((converter) =>
             {
+                static bool IsLast(BigInteger value, int digit)
+                {
+                    return value.ToString()
+                        .Remove(0, value.ToString().Length - digit + 1)
+                        .Replace("0", "")
+                        .Length == 0;
+                }
+
                 converter.ConvertFoolNumber = (value, number, digit) => number switch
                 {
                     0 => "",
@@ -40,6 +49,32 @@ namespace NabeAtsu.Core.States.Lv2.FoolDog
                     _ => "",
                 };
 
+                converter.ConvertDigitPart_One = (value, number, digit) =>
+                {
+                    return (Consts.GetDigitScale(digit)) switch
+                    {
+                        Consts.DigitScaleType.一 => "",
+                        Consts.DigitScaleType.万 => IsLast(value, digit) ? "まぉーん！" : "まん",
+                        Consts.DigitScaleType.億 => IsLast(value, digit) ? "おくぉーん！" : "おく",
+                        Consts.DigitScaleType.兆 => IsLast(value, digit) ? "ちょわぉーん！" : "ちょー",
+                        Consts.DigitScaleType.京 => IsLast(value, digit) ? "けぉーん！" : "けぇー",
+                        Consts.DigitScaleType.垓 => IsLast(value, digit) ? "がゎおーん！" : "がぃ",
+                        Consts.DigitScaleType.抒 => IsLast(value, digit) ? "じょぉーん！" : "じょぉ",
+                        Consts.DigitScaleType.穣 => IsLast(value, digit) ? "じょぅゎぉーん！" : "じょぅ",
+                        Consts.DigitScaleType.溝 => IsLast(value, digit) ? "こぉおーん！" : "こお",
+                        Consts.DigitScaleType.澗 => IsLast(value, digit) ? "かぉーーん！" : "かんん",
+                        Consts.DigitScaleType.正 => IsLast(value, digit) ? "せぉーん！" : "せーぃ",
+                        Consts.DigitScaleType.載 => IsLast(value, digit) ? "さゎぉーん！" : "さぁい",
+                        Consts.DigitScaleType.極 => IsLast(value, digit) ? "ごくぉーん！" : "ごく",
+                        Consts.DigitScaleType.恒河沙 => IsLast(value, digit) ? "ごがしゃぉーん！" : "ごーがしゃー",
+                        Consts.DigitScaleType.阿僧祇 => IsLast(value, digit) ? "あそぎょーん！" : "あそーぎぃ",
+                        Consts.DigitScaleType.那由他 => IsLast(value, digit) ? "なゆとぅぉーん！" : "なゆたぁ",
+                        Consts.DigitScaleType.不可思議 => IsLast(value, digit) ? "ふかしぎょーーん！" : "ふかしぎぃー",
+                        Consts.DigitScaleType.無量大数 => IsLast(value, digit) ? "むりょぉたいすぉーーーーん！" : "むりょーたいすー",
+                        _ => "",
+                    };
+                };
+
                 converter.ConvertDigitPart_Ten = (value, number, digit) =>
                 {
                     switch (number)
@@ -49,6 +84,8 @@ namespace NabeAtsu.Core.States.Lv2.FoolDog
                         default:
                             switch (Consts.GetDigitScale(digit))
                             {
+                                case Consts.DigitScaleType.一:
+                                    return IsLast(value, digit) ? "じゅゎぉーん！" : "じゅう";
                                 case Consts.DigitScaleType.兆:
                                 case Consts.DigitScaleType.京:
                                 case Consts.DigitScaleType.溝:
@@ -57,10 +94,42 @@ namespace NabeAtsu.Core.States.Lv2.FoolDog
                                 case Consts.DigitScaleType.載:
                                     return "じゅっ";
                                 default:
-                                    // 現在位置より下位に数値がなければ末尾処理
                                     return "じゅう";
                             }
                     }
+                };
+
+                converter.ConvertDigitPart_Hundred = (value, number, digit) =>
+                {
+                    var prefix = new Func<string>(() =>
+                    {
+                        switch (number)
+                        {
+                            case 0:
+                                return "";
+                            case 3:
+                                return "びゃく";
+                            case 6:
+                            case 8:
+                                return "ぴゃく";
+                            default:
+                                return "ひゃく";
+                        }
+                    })();
+
+                    return string.IsNullOrEmpty(prefix)
+                        ? ""
+                        : IsLast(value, digit) && digit < 4 ? $"{prefix}ゎぉーん！" : prefix;
+                };
+
+                converter.ConvertDigitPart_Thousand = (value, number, digit) =>
+                {
+                    return number switch
+                    {
+                        0 => "",
+                        3 => IsLast(value, digit) ? "ぜゎぉーん！" : "ぜん",
+                        _ => IsLast(value, digit) ? "せゎぉーん！" : "せん",
+                    };
                 };
             })
             .Build();
