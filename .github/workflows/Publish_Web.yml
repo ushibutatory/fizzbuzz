@@ -13,7 +13,7 @@ jobs:
   run:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v2
       - name: Deploy to Heroku
         run: |
           heroku container:login
