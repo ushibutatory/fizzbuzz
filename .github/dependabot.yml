@@ -4,5 +4,9 @@ updates:
     directory: "/src/FizzBuzzSolution/"
     schedule:
       interval: "monthly"
+    groups:
+      dependencies:
+        patterns:
+          - "*"
     reviewers:
       - "ushibutatory"
