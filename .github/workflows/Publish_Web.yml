@@ -22,7 +22,7 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
           role-to-assume: ${{ secrets.AWS_IAM_ROLE }}
       - uses: aws-actions/amazon-ecr-login@v1
-          id: login-ecr
+        id: login-ecr
       - name: Deploy to AWS
         env:
           AWS_ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
