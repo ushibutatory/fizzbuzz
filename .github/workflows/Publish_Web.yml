@@ -10,15 +10,24 @@ on:
       - Dockerfile
 
 jobs:
-  run:
+  deploy:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
     steps:
-      - uses: actions/checkout@v2
-      - name: Deploy to Heroku
-        run: |
-          heroku container:login
-          heroku container:push web -a ${HEROKU_APP_NAME}
-          heroku container:release web -a ${HEROKU_APP_NAME}
+      - uses: actions/checkout@v3
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: ${{ secrets.AWS_REGION }}
+          role-to-assume: ${{ secrets.AWS_IAM_ROLE }}
+      - uses: aws-actions/amazon-ecr-login@v1
+          id: login-ecr
+      - name: Deploy to AWS
         env:
-          HEROKU_APP_NAME: nabeatsu-dotnet
-          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+          AWS_ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          AWS_ECR_REPOSITORY: fizzbuzz
+          DOCKER_IMAGE_TAG: latest
+        run: |
+          docker build . --tag ${{ env.AWS_ECR_REGISTRY }}/${{ env.AWS_ECR_REPOSITORY }}:${{ env.DOCKER_IMAGE_TAG }}
+          docker push ${{ env.AWS_ECR_REGISTRY }}/${{ env.AWS_ECR_REPOSITORY }}:${{ env.DOCKER_IMAGE_TAG }}
