@@ -17,8 +17,6 @@ RUN dotnet build -c Release -o /app/build
 
 # publish
 FROM build AS publish
-WORKDIR /
-RUN mkdir /release
 WORKDIR /src/FizzBuzzSolution/NabeAtsu.Web
 RUN dotnet publish -c Release -o /app/publish /p:UseAppHost=false
 
