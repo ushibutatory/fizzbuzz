@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30204.135
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FizzBuzz.App", "FizzBuzz.App\FizzBuzz.App.csproj", "{E07F6D1A-1B8E-4ED9-8FFF-892F12465D05}"
 EndProject
@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NabeAtsu.Core", "NabeAtsu.C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NabeAtsu.Core.Tests", "NabeAtsu.Core.Tests\NabeAtsu.Core.Tests.csproj", "{1E0D105B-41B7-40F8-834C-6FED4F580A6B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NabeAtsu.Web", "NabeAtsu.Web\NabeAtsu.Web.csproj", "{78E1350C-8B19-4F80-93A9-039B8B045D74}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NabeAtsu.Web", "NabeAtsu.Web\NabeAtsu.Web.csproj", "{78E1350C-8B19-4F80-93A9-039B8B045D74}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NabeAtsu.Api", "NabeAtsu.Api\NabeAtsu.Api.csproj", "{74D3B57F-1284-4AC2-80AC-B767D3C5D332}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{78E1350C-8B19-4F80-93A9-039B8B045D74}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{78E1350C-8B19-4F80-93A9-039B8B045D74}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{78E1350C-8B19-4F80-93A9-039B8B045D74}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74D3B57F-1284-4AC2-80AC-B767D3C5D332}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74D3B57F-1284-4AC2-80AC-B767D3C5D332}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74D3B57F-1284-4AC2-80AC-B767D3C5D332}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74D3B57F-1284-4AC2-80AC-B767D3C5D332}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
