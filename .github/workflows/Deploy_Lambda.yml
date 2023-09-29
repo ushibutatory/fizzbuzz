@@ -1,0 +1,30 @@
+name: Deploy AWS Lambda
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+    paths:
+      - src/**
+      - .github/workflows/**
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v3
+      - uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: ${{ secrets.AWS_REGION }}
+          role-to-assume: ${{ secrets.AWS_IAM_ROLE }}
+      - name: Deploy to AWS
+        run: |
+          cd "${GITHUB_WORKSPACE}/${FUNCTION_DIR}/"
+          dotnet lambda deploy-function
+        env:
+          FUNCTION_DIR: src/FizzBuzzSolution/NabeAtsu.Lambda
+          FUNCTION_NAME: nabeatsu
