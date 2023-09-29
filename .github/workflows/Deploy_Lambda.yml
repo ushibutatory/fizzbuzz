@@ -21,6 +21,11 @@ jobs:
         with:
           aws-region: ${{ secrets.AWS_REGION }}
           role-to-assume: ${{ secrets.AWS_IAM_ROLE }}
+      - name: Setup Lambda Tools
+        run: |
+          dotnet tool install -g Amazon.Lambda.Tools
+          export PATH="$PATH:/root/.dotnet/tools"
+          dotnet tool list -g
       - name: Deploy to AWS
         run: |
           cd "${GITHUB_WORKSPACE}/${FUNCTION_DIR}/"
