@@ -4,6 +4,7 @@ using Gozolop.Core.Aws.Lambda.Logging;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using NabeAtsu.Core;
+using System.Net;
 using System.Numerics;
 using System.Text.Json;
 
@@ -46,7 +47,7 @@ namespace NabeAtsu.Lambda
 
             return new APIGatewayProxyResponse
             {
-                StatusCode = 200,
+                StatusCode = (int)HttpStatusCode.OK,
                 IsBase64Encoded = false,
                 Headers = new Dictionary<string, string> { { "Content-Type", "application/json" } },
                 Body = JsonSerializer.Serialize(answer),
