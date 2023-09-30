@@ -34,7 +34,7 @@ namespace NabeAtsu.Lambda
 
             var serializerOptions = new JsonSerializerOptions
             {
-                PropertyNameCaseInsensitive = false,
+                PropertyNameCaseInsensitive = true,
             };
             var args = JsonSerializer.Deserialize<Arguments>(request.Body, serializerOptions)
                 ?? throw new InvalidRequestException(request);
