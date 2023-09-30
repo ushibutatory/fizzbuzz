@@ -48,6 +48,7 @@ namespace NabeAtsu.Lambda
                 StatusCode = 200,
                 IsBase64Encoded = false,
                 Headers = { { "Content-Type", "application/json" } },
+                MultiValueHeaders = { },
                 Body = JsonSerializer.Serialize(answer),
             };
         }
