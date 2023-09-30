@@ -42,13 +42,13 @@ namespace NabeAtsu.Lambda
 
             var player = new Player.Builder().AutoBuild();
             var answer = player.Answer(start, count).ToArray();
+            logger.LogDebug("Answer is {answer}", answer);
 
-            return new APIGatewayProxyResponse()
+            return new APIGatewayProxyResponse
             {
                 StatusCode = 200,
                 IsBase64Encoded = false,
-                Headers = { { "Content-Type", "application/json" } },
-                MultiValueHeaders = { },
+                Headers = new Dictionary<string, string> { { "Content-Type", "application/json" } },
                 Body = JsonSerializer.Serialize(answer),
             };
         }
