@@ -1,0 +1,40 @@
+name: Deploy AWS Lambda
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - src/**
+      - .github/workflows/Deploy_Lambda.yml
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-region: ${{ secrets.AWS_REGION }}
+          role-to-assume: ${{ secrets.AWS_IAM_ROLE }}
+      - name: Setup Lambda Tools
+        run: |
+          dotnet tool install -g Amazon.Lambda.Tools
+          export PATH="$PATH:/root/.dotnet/tools"
+          dotnet tool list -g
+      - name: Deploy to AWS
+        run: |
+          cd "${GITHUB_WORKSPACE}/${FUNCTION_DIR}/"
+          dotnet nuget add source ${NUGET_SOURCE} -u ${NUGET_USER} -p ${NUGET_PASS} --store-password-in-clear-text
+          dotnet lambda deploy-function
+        env:
+          NUGET_SOURCE: ${{ secrets.NUGET_SOURCE }}
+          NUGET_USER: ushibutatory
+          NUGET_PASS: ${{ secrets.NUGET_PASS }}
+          FUNCTION_DIR: src/FizzBuzzSolution/NabeAtsu.Lambda
+          FUNCTION_NAME: nabeatsu

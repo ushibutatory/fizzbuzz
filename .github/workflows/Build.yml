@@ -13,11 +13,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Setup
-        uses: actions/setup-dotnet@v1
+        uses: actions/setup-dotnet@v3
       - name: Build and Test
         run: |
           cd "${GITHUB_WORKSPACE}/${SOLUTION_DIR}/"
+          dotnet nuget add source ${NUGET_SOURCE} -u ${NUGET_USER} -p ${NUGET_PASS} --store-password-in-clear-text
           dotnet build
           dotnet test --no-build
         env:
+          NUGET_SOURCE: ${{ secrets.NUGET_SOURCE }}
+          NUGET_USER: ushibutatory
+          NUGET_PASS: ${{ secrets.NUGET_PASS }}
           SOLUTION_DIR: ./src/FizzBuzzSolution
