@@ -11,61 +11,60 @@ using System.Text.Json;
 // Assembly attribute to enable the Lambda function's JSON input to be converted into a .NET class.
 [assembly: LambdaSerializer(typeof(Amazon.Lambda.Serialization.SystemTextJson.DefaultLambdaJsonSerializer))]
 
-namespace NabeAtsu.Lambda
+namespace NabeAtsu.Lambda;
+
+public class Function
 {
-    public class Function
+    public APIGatewayProxyResponse FunctionHandler(APIGatewayProxyRequest request, ILambdaContext context)
     {
-        public APIGatewayProxyResponse FunctionHandler(APIGatewayProxyRequest request, ILambdaContext context)
+        var provider = new Func<IServiceProvider>(() =>
         {
-            var provider = new Func<IServiceProvider>(() =>
-            {
-                var services = new ServiceCollection()
-                    .AddLogging(logging =>
-                    {
-                        logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Debug);
-                        logging.AddProvider(new LambdaLoggerProvider(context));
-                    });
+            var services = new ServiceCollection()
+                .AddLogging(logging =>
+                {
+                    logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Debug);
+                    logging.AddProvider(new LambdaLoggerProvider(context));
+                });
 
-                return services.BuildServiceProvider();
-            })();
+            return services.BuildServiceProvider();
+        })();
 
-            var logger = provider.GetService<ILogger<Function>>();
-            logger.LogInformation("ILambdaContext: {context}", JsonSerializer.Serialize(context));
+        var logger = provider.GetService<ILogger<Function>>();
+        logger.LogInformation("ILambdaContext: {context}", JsonSerializer.Serialize(context));
 
-            var serializerOptions = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true,
-            };
-            var args = JsonSerializer.Deserialize<Arguments>(request.Body, serializerOptions)
-                ?? throw new InvalidRequestException(request);
-            if (!BigInteger.TryParse(args.Start, out var start)) throw new InvalidRequestException(request);
-            if (!BigInteger.TryParse(args.Count, out var count)) throw new InvalidRequestException(request);
-
-            var player = new Player.Builder().AutoBuild();
-            var answer = player.Answer(start, count).ToArray();
-            logger.LogDebug("Answer is {answer}", answer);
-
-            return new APIGatewayProxyResponse
-            {
-                StatusCode = (int)HttpStatusCode.OK,
-                IsBase64Encoded = false,
-                Headers = new Dictionary<string, string> { { "Content-Type", "application/json" } },
-                Body = JsonSerializer.Serialize(answer),
-            };
-        }
-
-        public class Arguments
+        var serializerOptions = new JsonSerializerOptions
         {
-            public string? Start { get; set; } = string.Empty;
+            PropertyNameCaseInsensitive = true,
+        };
+        var args = JsonSerializer.Deserialize<Arguments>(request.Body, serializerOptions)
+            ?? throw new InvalidRequestException(request);
+        if (!BigInteger.TryParse(args.Start, out var start)) throw new InvalidRequestException(request);
+        if (!BigInteger.TryParse(args.Count, out var count)) throw new InvalidRequestException(request);
 
-            public string? Count { get; set; } = string.Empty;
-        }
+        var player = new Player.Builder().AutoBuild();
+        var answer = player.Answer(start, count).ToArray();
+        logger.LogDebug("Answer is {answer}", answer);
 
-        public class InvalidRequestException : Exception
+        return new APIGatewayProxyResponse
         {
-            public InvalidRequestException(APIGatewayProxyRequest request)
-                : base($"Argument is invalid. [{request.Body}]")
-            { }
-        }
+            StatusCode = (int)HttpStatusCode.OK,
+            IsBase64Encoded = false,
+            Headers = new Dictionary<string, string> { { "Content-Type", "application/json" } },
+            Body = JsonSerializer.Serialize(answer),
+        };
+    }
+
+    public class Arguments
+    {
+        public string? Start { get; set; } = string.Empty;
+
+        public string? Count { get; set; } = string.Empty;
+    }
+
+    public class InvalidRequestException : Exception
+    {
+        public InvalidRequestException(APIGatewayProxyRequest request)
+            : base($"Argument is invalid. [{request.Body}]")
+        { }
     }
 }

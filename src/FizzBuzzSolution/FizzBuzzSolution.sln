@@ -17,8 +17,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NabeAtsu.Web", "NabeAtsu.We
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NabeAtsu.Lambda", "NabeAtsu.Lambda\NabeAtsu.Lambda.csproj", "{82376F9E-617C-4CF3-B58C-BA080BFF1031}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NabeAtsu.Lambda.Tests", "NabeAtsu.Lambda.Tests\NabeAtsu.Lambda.Tests.csproj", "{BF4F69A8-A698-4F86-9604-1003C3860940}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,10 +51,6 @@ Global
 		{82376F9E-617C-4CF3-B58C-BA080BFF1031}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{82376F9E-617C-4CF3-B58C-BA080BFF1031}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{82376F9E-617C-4CF3-B58C-BA080BFF1031}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BF4F69A8-A698-4F86-9604-1003C3860940}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BF4F69A8-A698-4F86-9604-1003C3860940}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BF4F69A8-A698-4F86-9604-1003C3860940}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BF4F69A8-A698-4F86-9604-1003C3860940}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
