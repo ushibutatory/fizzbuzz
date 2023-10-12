@@ -68,7 +68,7 @@ public class Function
                 };
 
             default:
-                throw new Exception($"想定していないHTTPメソッドです。[{request.HttpMethod}]");
+                throw new Exception($"Invalid Http Method. [{request.HttpMethod}]");
         }
     }
 
