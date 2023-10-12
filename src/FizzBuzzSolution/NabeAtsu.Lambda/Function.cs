@@ -17,44 +17,59 @@ public class Function
 {
     public APIGatewayProxyResponse FunctionHandler(APIGatewayProxyRequest request, ILambdaContext context)
     {
-        var provider = new Func<IServiceProvider>(() =>
+        switch (request.HttpMethod)
         {
-            var services = new ServiceCollection()
-                .AddLogging(logging =>
+            case "OPTIONS":
+                return new APIGatewayProxyResponse
                 {
-                    logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Debug);
-                    logging.AddProvider(new LambdaLoggerProvider(context));
-                });
+                    StatusCode = (int)HttpStatusCode.OK,
+                    Headers = new Dictionary<string, string> {
+                        { "Access-Control-Allow-Origin", "*" }
+                    },
+                };
 
-            return services.BuildServiceProvider();
-        })();
+            case "POST":
+                var provider = new Func<IServiceProvider>(() =>
+                {
+                    var services = new ServiceCollection()
+                        .AddLogging(logging =>
+                        {
+                            logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Debug);
+                            logging.AddProvider(new LambdaLoggerProvider(context));
+                        });
+                    return services.BuildServiceProvider();
+                })();
 
-        var logger = provider.GetService<ILogger<Function>>();
-        logger.LogInformation("ILambdaContext: {context}", JsonSerializer.Serialize(context));
+                var logger = provider.GetService<ILogger<Function>>();
+                logger.LogInformation("ILambdaContext: {context}", JsonSerializer.Serialize(context));
 
-        var serializerOptions = new JsonSerializerOptions
-        {
-            PropertyNameCaseInsensitive = true,
-        };
-        var args = JsonSerializer.Deserialize<Arguments>(request.Body, serializerOptions)
-            ?? throw new InvalidRequestException(request);
-        if (!BigInteger.TryParse(args.Start, out var start)) throw new InvalidRequestException(request);
-        if (!BigInteger.TryParse(args.Count, out var count)) throw new InvalidRequestException(request);
+                var serializerOptions = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true,
+                };
+                var args = JsonSerializer.Deserialize<Arguments>(request.Body, serializerOptions)
+                    ?? throw new InvalidRequestException(request);
+                if (!BigInteger.TryParse(args.Start, out var start)) throw new InvalidRequestException(request);
+                if (!BigInteger.TryParse(args.Count, out var count)) throw new InvalidRequestException(request);
 
-        var player = new Player.Builder().AutoBuild();
-        var answer = player.Answer(start, count).ToArray();
-        logger.LogDebug("Answer is {answer}", answer);
+                var player = new Player.Builder().AutoBuild();
+                var answer = player.Answer(start, count).ToArray();
+                logger.LogDebug("Answer is {answer}", answer);
 
-        return new APIGatewayProxyResponse
-        {
-            StatusCode = (int)HttpStatusCode.OK,
-            IsBase64Encoded = false,
-            Headers = new Dictionary<string, string> {
-                { "Content-Type", "application/json" },
-                { "Access-Control-Allow-Origin", "*" }
-            },
-            Body = JsonSerializer.Serialize(answer),
-        };
+                return new APIGatewayProxyResponse
+                {
+                    StatusCode = (int)HttpStatusCode.OK,
+                    IsBase64Encoded = false,
+                    Headers = new Dictionary<string, string> {
+                        { "Content-Type", "application/json" },
+                        { "Access-Control-Allow-Origin", "*" }
+                    },
+                    Body = JsonSerializer.Serialize(answer),
+                };
+
+            default:
+                throw new Exception($"Invalid Http Method. [{request.HttpMethod}]");
+        }
     }
 
     public class Arguments
