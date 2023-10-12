@@ -49,7 +49,10 @@ public class Function
         {
             StatusCode = (int)HttpStatusCode.OK,
             IsBase64Encoded = false,
-            Headers = new Dictionary<string, string> { { "Content-Type", "application/json" } },
+            Headers = new Dictionary<string, string> {
+                { "Content-Type", "application/json" },
+                { "Access-Control-Allow-Origin", "*" }
+            },
             Body = JsonSerializer.Serialize(answer),
         };
     }
