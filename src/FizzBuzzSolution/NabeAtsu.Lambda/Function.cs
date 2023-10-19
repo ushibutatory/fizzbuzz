@@ -17,6 +17,21 @@ public class Function
 {
     public APIGatewayProxyResponse FunctionHandler(APIGatewayProxyRequest request, ILambdaContext context)
     {
+        var provider = new Func<IServiceProvider>(() =>
+        {
+            var services = new ServiceCollection()
+                .AddLogging(logging =>
+                {
+                    logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Debug);
+                    logging.AddProvider(new LambdaLoggerProvider(context));
+                });
+            return services.BuildServiceProvider();
+        })();
+
+        var logger = provider.GetService<ILogger<Function>>();
+        logger.LogDebug("APIGatewayProxyRequest: {request}", JsonSerializer.Serialize(request));
+        logger.LogDebug("ILambdaContext: {context}", JsonSerializer.Serialize(context));
+
         switch (request.HttpMethod)
         {
             case "OPTIONS":
@@ -31,20 +46,6 @@ public class Function
                 };
 
             case "POST":
-                var provider = new Func<IServiceProvider>(() =>
-                {
-                    var services = new ServiceCollection()
-                        .AddLogging(logging =>
-                        {
-                            logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Debug);
-                            logging.AddProvider(new LambdaLoggerProvider(context));
-                        });
-                    return services.BuildServiceProvider();
-                })();
-
-                var logger = provider.GetService<ILogger<Function>>();
-                logger.LogInformation("ILambdaContext: {context}", JsonSerializer.Serialize(context));
-
                 var serializerOptions = new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true,
