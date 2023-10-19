@@ -17,45 +17,60 @@ public class Function
 {
     public APIGatewayProxyResponse FunctionHandler(APIGatewayProxyRequest request, ILambdaContext context)
     {
-        var provider = new Func<IServiceProvider>(() =>
+        switch (request.HttpMethod)
         {
-            var services = new ServiceCollection()
-                .AddLogging(logging =>
+            case "OPTIONS":
+                return new APIGatewayProxyResponse
                 {
-                    logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Debug);
-                    logging.AddProvider(new LambdaLoggerProvider(context));
-                });
-            return services.BuildServiceProvider();
-        })();
+                    StatusCode = (int)HttpStatusCode.OK,
+                    Headers = new Dictionary<string, string> {
+                        { "Access-Control-Allow-Headers", "Content-Type" },
+                        { "Access-Control-Allow-Origin", "*" },
+                        { "Access-Control-Allow-Methods", "OPTIONS, POST" }
+                    },
+                };
 
-        var logger = provider.GetService<ILogger<Function>>();
-        logger.LogInformation("ILambdaContext: {context}", JsonSerializer.Serialize(context));
+            case "POST":
+                var provider = new Func<IServiceProvider>(() =>
+                {
+                    var services = new ServiceCollection()
+                        .AddLogging(logging =>
+                        {
+                            logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Debug);
+                            logging.AddProvider(new LambdaLoggerProvider(context));
+                        });
+                    return services.BuildServiceProvider();
+                })();
 
-        var serializerOptions = new JsonSerializerOptions
-        {
-            PropertyNameCaseInsensitive = true,
-        };
-        var args = JsonSerializer.Deserialize<Arguments>(request.Body, serializerOptions)
-            ?? throw new InvalidRequestException(request);
-        if (!BigInteger.TryParse(args.Start, out var start)) throw new InvalidRequestException(request);
-        if (!BigInteger.TryParse(args.Count, out var count)) throw new InvalidRequestException(request);
+                var logger = provider.GetService<ILogger<Function>>();
+                logger.LogInformation("ILambdaContext: {context}", JsonSerializer.Serialize(context));
 
-        var player = new Player.Builder().AutoBuild();
-        var answer = player.Answer(start, count).ToArray();
-        logger.LogDebug("Answer is {answer}", answer);
+                var serializerOptions = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true,
+                };
+                var args = JsonSerializer.Deserialize<Arguments>(request.Body, serializerOptions)
+                    ?? throw new InvalidRequestException(request);
+                if (!BigInteger.TryParse(args.Start, out var start)) throw new InvalidRequestException(request);
+                if (!BigInteger.TryParse(args.Count, out var count)) throw new InvalidRequestException(request);
 
-        return new APIGatewayProxyResponse
-        {
-            StatusCode = (int)HttpStatusCode.OK,
-            IsBase64Encoded = false,
-            Headers = new Dictionary<string, string> {
-                { "Content-Type", "application/json" },
-                { "Access-Control-Allow-Headers", "Content-Type" },
-                { "Access-Control-Allow-Origin", "*" },
-                { "Access-Control-Allow-Methods", "POST" }
-            },
-            Body = JsonSerializer.Serialize(answer),
-        };
+                var player = new Player.Builder().AutoBuild();
+                var answer = player.Answer(start, count).ToArray();
+                logger.LogDebug("Answer is {answer}", answer);
+
+                return new APIGatewayProxyResponse
+                {
+                    StatusCode = (int)HttpStatusCode.OK,
+                    IsBase64Encoded = false,
+                    Headers = new Dictionary<string, string> {
+                        { "Content-Type", "application/json" },
+                    },
+                    Body = JsonSerializer.Serialize(answer),
+                };
+
+            default:
+                throw new Exception($"Not implemented Http method. {request.HttpMethod}");
+        }
     }
 
     public class Arguments
