@@ -57,7 +57,7 @@ public class Function
 
                 var player = new Player.Builder().AutoBuild();
                 var answer = player.Answer(start, count).ToArray();
-                logger.LogDebug("Answer is {answer}", answer);
+                logger.LogDebug("Answer is {answer}", JsonSerializer.Serialize(answer));
 
                 return new APIGatewayProxyResponse
                 {
@@ -65,6 +65,7 @@ public class Function
                     IsBase64Encoded = false,
                     Headers = new Dictionary<string, string> {
                         { "Content-Type", "application/json" },
+                        { "Access-Control-Allow-Origin", "*" },
                     },
                     Body = JsonSerializer.Serialize(answer),
                 };
