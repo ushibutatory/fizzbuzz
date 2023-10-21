@@ -9,11 +9,14 @@ namespace NabeAtsu.Core
 
         public BigInteger OriginalValue { get; }
 
+        public string OriginalValueText { get; }
+
         public string ConvertedText { get; }
 
         private Result(Builder builder)
         {
             OriginalValue = builder.OriginalValue;
+            OriginalValueText = builder.OriginalValue.ToString();
             UsingState = builder.UsingState;
             ConvertedText = builder.ConvertedText;
         }
