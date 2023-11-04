@@ -1,0 +1,22 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - src/**
+      - .github/workflows/deploy.yml
+
+jobs:
+  deploy:
+    uses: gozolop-edition/actions/.github/workflows/dotnet-lambda-deploy.yml@main
+    with:
+      solution_dir: /src/FizzBuzzSolution
+      project_dir: NabeAtsu.Lambda
+      with_nuget: true
+    secrets:
+      nuget_user: ${{ secrets.NUGET_USER }}
+      nuget_pass: ${{ secrets.NUGET_PASS }}
+      aws_region: ${{ secrets.AWS_REGION }}
+      aws_iam_role: ${{ secrets.AWS_IAM_ROLE }}
