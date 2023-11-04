@@ -1,0 +1,17 @@
+name: Build
+
+on:
+  push:
+    paths:
+      - src/**
+      - .github/workflows/build.yml
+
+jobs:
+  build:
+    uses: ushibutatory/actions/.github/workflows/dotnet-build.yml@main
+    with:
+      solution_dir: /src/FizzBuzzSolution
+      with_nuget: true
+    secrets:
+      NUGET_USER: ${{ secrets.NUGET_USER }}
+      NUGET_PASS: ${{ secrets.NUGET_PASS }}
