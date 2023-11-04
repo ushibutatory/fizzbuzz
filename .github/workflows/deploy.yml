@@ -10,7 +10,7 @@ on:
 
 jobs:
   deploy:
-    uses: gozolop-edition/actions/.github/workflows/dotnet-lambda-deploy.yml@main
+    uses: ushibutatory/actions/.github/workflows/dotnet-deploy-lambda.yml@main
     with:
       solution_dir: /src/FizzBuzzSolution
       project_dir: NabeAtsu.Lambda
