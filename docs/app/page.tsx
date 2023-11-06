@@ -1,79 +1,87 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
 
-export default function Home() {
+import React from "react";
+import styles from "./page.module.css";
+import axios, { AxiosResponse } from "axios";
+import { IResult } from "@/models/IResult";
+import Table from "./table";
+
+const Page = () => {
+  const [start, setStart] = React.useState(1);
+  const [count, setCount] = React.useState(15);
+  const [results, setResults] = React.useState<IResult[]>([]);
+
+  const url = "https://m0arwwe4k8.execute-api.ap-northeast-1.amazonaws.com/prod/nabeatsu";
+
+  const execute = () => {
+    axios
+      .post(url, {
+        start: start.toString(),
+        count: count.toString(),
+      })
+      .then((response: AxiosResponse<IResult[]>) => {
+        setResults(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   return (
     <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.tsx</code>
-        </p>
+      <div>
+        <h1>NabeAtsu.API</h1>
         <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image src="/vercel.svg" alt="Vercel Logo" className={styles.vercelLogo} width={100} height={24} priority />
-          </a>
+          <ul>
+            <li>
+              <a>GitHub</a>
+            </li>
+            <li>
+              <a>X(Twitter) @ushibutatory</a>
+            </li>
+          </ul>
         </div>
       </div>
-
-      <div className={styles.center}>
-        <Image className={styles.logo} src="/next.svg" alt="Next.js Logo" width={180} height={37} priority />
+      <div>
+        Url: <span>{url}</span>
       </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>Instantly deploy your Next.js site to a shareable URL with Vercel.</p>
-        </a>
+      <div>
+        <p>数値を以下ルールで変換します。</p>
+        <div>
+          <ul>
+            <li>3の倍数と3のつく数の時、アホになります。</li>
+            <li>5の倍数の時、犬になります。</li>
+            <li>両方の条件を満たす時、アホな犬になります。</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <fieldset>
+          <legend>やってみよう！</legend>
+          <div>
+            <div>
+              <span>最初の数 (start)</span>
+              <div>
+                <input type="number" min={1} value={start} onChange={(e) => setStart(Number(e.currentTarget.value))} />
+              </div>
+            </div>
+            <div>
+              <span>いくつ数えるか (count)</span>
+              <div>
+                <input type="number" min={1} value={count} onChange={(e) => setCount(Number(e.currentTarget.value))} />
+              </div>
+            </div>
+            <div>
+              <button onClick={execute}>Go!</button>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+      <div>
+        <Table results={results} />
       </div>
     </main>
   );
-}
+};
+
+export default Page;

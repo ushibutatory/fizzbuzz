@@ -14,9 +14,15 @@ FizzBuzz を実装しました。
 
 ## Web 版
 
-ASP.NET Core で実装し、AWS App Runner にデプロイしています。
-
 [https://fizzbuzz.ushibutatory.net/](https://fizzbuzz.ushibutatory.net/)
+
+- API
+  - .NET
+  - AWS Lambda + API Gateway
+- UI
+  - Next.js
+  - Vercel
+  - Route53
 
 ## コンソールアプリ版
 
