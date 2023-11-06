@@ -5,15 +5,18 @@ import styles from "./page.module.css";
 import axios, { AxiosResponse } from "axios";
 import { IResult } from "@/models/IResult";
 import Table from "../components/table";
+import Loading from "@/components/loading";
 
 const Page = () => {
   const [start, setStart] = React.useState(1);
   const [count, setCount] = React.useState(15);
+  const [isLoading, setIsLoadaing] = React.useState(false);
   const [results, setResults] = React.useState<IResult[]>([]);
 
   const url = "https://m0arwwe4k8.execute-api.ap-northeast-1.amazonaws.com/prod/nabeatsu";
 
   const execute = () => {
+    setIsLoadaing(true);
     axios
       .post(url, {
         start: start.toString(),
@@ -24,6 +27,9 @@ const Page = () => {
       })
       .catch((error) => {
         console.log(error);
+      })
+      .finally(() => {
+        setIsLoadaing(false);
       });
   };
 
@@ -76,7 +82,10 @@ const Page = () => {
               </div>
             </div>
             <div>
-              <button onClick={execute}>Go!</button>
+              <button className="btn btn-primary" onClick={execute}>
+                Go!
+              </button>
+              <Loading visible={isLoading} />
             </div>
           </div>
         </fieldset>
