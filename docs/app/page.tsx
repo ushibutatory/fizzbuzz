@@ -4,7 +4,7 @@ import React from "react";
 import styles from "./page.module.css";
 import axios, { AxiosResponse } from "axios";
 import { IResult } from "@/models/IResult";
-import Table from "./table";
+import Table from "../components/table";
 
 const Page = () => {
   const [start, setStart] = React.useState(1);
