@@ -2,7 +2,7 @@ const Loading = (props: { visible: boolean }) => {
   if (!props.visible) {
     return <></>;
   } else {
-    return <span>now loading...</span>;
+    return <span className="p-1">now loading...</span>;
   }
 };
 
