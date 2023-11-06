@@ -34,16 +34,20 @@ const Page = () => {
         <div>
           <ul>
             <li>
-              <a>GitHub</a>
+              <a href="https://github.com/ushibutatory/fizzbuzz" target="_blank">
+                GitHub
+              </a>
             </li>
             <li>
-              <a>X(Twitter) @ushibutatory</a>
+              <a href="https://twitter.com/ushibutatory" target="_blank">
+                X(Twitter) @ushibutatory
+              </a>
             </li>
           </ul>
         </div>
       </div>
       <div>
-        Url: <span>{url}</span>
+        API URL: <span>{url}</span>
       </div>
       <div>
         <p>数値を以下ルールで変換します。</p>
