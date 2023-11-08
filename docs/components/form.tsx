@@ -2,6 +2,7 @@ import { IResult } from "@/models/IResult";
 import axios, { AxiosResponse } from "axios";
 import React from "react";
 import Loading from "./loading";
+import styles from "../app/form.module.scss";
 
 const Form = () => {
   const [start, setStart] = React.useState(1);
@@ -69,7 +70,7 @@ const Form = () => {
                 </tr>
               </tbody>
             </table>
-            <div>
+            <div className={styles.run}>
               <button className="btn btn-primary" onClick={execute}>
                 Go!
               </button>
