@@ -32,6 +32,8 @@ const Form = () => {
 
   const noResult = !results || results.length == 0;
 
+  const formatter = new Intl.NumberFormat();
+
   return (
     <div className="row">
       <div className="col-md-6">
@@ -94,7 +96,7 @@ const Form = () => {
               {results.map((_) => {
                 return (
                   <tr key={_.OriginalValueText}>
-                    <td>{_.OriginalValueText}</td>
+                    <td>{formatter.format(BigInt(_.OriginalValueText))}</td>
                     <td>{_.ConvertedText}</td>
                   </tr>
                 );
