@@ -4,7 +4,7 @@ import { Zen_Maru_Gothic } from "next/font/google";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./globals.scss";
 
-const inter = Zen_Maru_Gothic({ weight: "400", subsets: ["latin"] });
+const font = Zen_Maru_Gothic({ weight: "400", subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "NebeAtsu.API - ushibutatory",
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ja">
-      <body className={inter.className}>
+      <body className={font.className}>
         {children}
         <Script
           src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
