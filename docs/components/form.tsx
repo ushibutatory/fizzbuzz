@@ -1,33 +1,26 @@
 import { IResult } from "@/models/IResult";
-import axios, { AxiosResponse } from "axios";
 import React from "react";
 import Loading from "./loading";
 import styles from "../app/form.module.scss";
+import NabeatsuService from "@/services/nabeatsuService";
 
 const Form = () => {
-  const [start, setStart] = React.useState(1);
-  const [count, setCount] = React.useState(15);
+  const [start, setStart] = React.useState<number>(1);
+  const [count, setCount] = React.useState<number>(15);
   const [isLoading, setIsLoadaing] = React.useState(false);
   const [results, setResults] = React.useState<IResult[]>([]);
 
-  const url = "https://m0arwwe4k8.execute-api.ap-northeast-1.amazonaws.com/prod/nabeatsu";
+  const onClick = async () => {
+    const service = new NabeatsuService().setLoadingStatus((isLoading: boolean) => {
+      setIsLoadaing(isLoading);
+    });
 
-  const execute = () => {
-    setIsLoadaing(true);
-    axios
-      .post(url, {
-        start: start.toString(),
-        count: count.toString(),
-      })
-      .then((response: AxiosResponse<IResult[]>) => {
-        setResults(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-      .finally(() => {
-        setIsLoadaing(false);
-      });
+    try {
+      const results = await service.execute(start, count);
+      setResults(results);
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const noResult = !results || results.length == 0;
@@ -73,7 +66,7 @@ const Form = () => {
               </tbody>
             </table>
             <div className={styles.run}>
-              <button className="btn btn-primary" onClick={execute}>
+              <button className="btn btn-primary" onClick={onClick}>
                 Go!
               </button>
               <Loading visible={isLoading} />
