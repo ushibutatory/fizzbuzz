@@ -20,12 +20,12 @@ const Nav = () => {
           <ul className="navbar-nav">
             <li className="nav-item">
               <a className="nav-link" href="https://github.com/ushibutatory/fizzbuzz" target="_blank">
-                <i className="bi bi-github"></i> GitHub
+                <i className="fa-brands fa-github"></i> GitHub
               </a>
             </li>
             <li className="nav-item">
               <a className="nav-link" href="https://twitter.com/ushibutatory" target="_blank">
-                <i className="bi bi-twitter"></i> X (Twitter)
+                <i className="fa-brands fa-x-twitter"></i> X (Twitter)
               </a>
             </li>
           </ul>
