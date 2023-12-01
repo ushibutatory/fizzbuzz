@@ -4,6 +4,7 @@ updates:
     directory: "/src/FizzBuzzSolution/"
     schedule:
       interval: "monthly"
+    target-branch: "develop"
     groups:
       dependencies:
         patterns:
