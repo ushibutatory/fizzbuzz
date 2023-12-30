@@ -34,7 +34,7 @@ namespace NabeAtsu.Core.Tests
             Assert.Empty(results.Where(result => result.OriginalValue.ToString() != result.ConvertedText));
         }
 
-        public static TheoryData<int, IState> JudgeStatePatterns => new TheoryData<int, IState>
+        public static TheoryData<int, IState> JudgeStatePatterns => new()
         {
             { 1, State.Default },
             { 2, State.Default },
@@ -64,7 +64,7 @@ namespace NabeAtsu.Core.Tests
             Assert.True(expected.GetType() == actual.GetType());
         }
 
-        public static TheoryData<BigInteger, string> ConvertText_FoolPatterns => new TheoryData<BigInteger, string>
+        public static TheoryData<BigInteger, string> ConvertText_FoolPatterns => new()
         {
             { 63, "ろくじゅうさぁん" },
             { 63, "ろくじゅうさぁん" },
@@ -91,7 +91,7 @@ namespace NabeAtsu.Core.Tests
             Assert.Equal(expected, actual.ConvertedText);
         }
 
-        public static TheoryData<int, string> ConvertText_DogPatterns => new TheoryData<int, string>
+        public static TheoryData<int, string> ConvertText_DogPatterns => new()
         {
             { 5, "わん！U^ｪ^U" },
             { 10, "わん！U^ｪ^U" },
@@ -108,7 +108,7 @@ namespace NabeAtsu.Core.Tests
             Assert.Equal(expected, actual.ConvertedText);
         }
 
-        public static TheoryData<int, string> ConvertText_FoolDogPatterns => new TheoryData<int, string>
+        public static TheoryData<int, string> ConvertText_FoolDogPatterns => new()
         {
             { 15, "じゅうごゎぉーん！" },
             { 30, "さんじゅゎぉーん！" },
