@@ -32,6 +32,9 @@ namespace NabeAtsu.Core
         /// <param name="digit">桁数</param>
         /// <returns>区切り種別</returns>
         /// <remarks>
+        /// 例: 9桁の数値（digit = 9）の場合 ...
+        ///     x億なので DigitPartType.One を返す
+        /// <br/>
         /// 例: 10桁の数値（digit = 10）の場合 ...
         ///     xx億なので DigitPartType.Ten を返す
         /// <br/>
