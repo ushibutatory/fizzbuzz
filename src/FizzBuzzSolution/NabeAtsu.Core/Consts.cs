@@ -32,10 +32,11 @@ namespace NabeAtsu.Core
         /// <param name="digit">桁数</param>
         /// <returns>区切り種別</returns>
         /// <remarks>
-        /// 例: 10桁の数値の場合
-        ///  digit = 10
-        ///  → 余り 2
-        ///  → DigitPartType.Ten を返す
+        /// 例: 10桁の数値（digit = 10）の場合 ...
+        ///     xx億なので DigitPartType.Ten を返す
+        ///     <br/>
+        /// 例: 100桁の数値（digit = 100）の場合 ...
+        ///     xxx億なので DigitPartType.Hundred を返す
         /// </remarks>
         public static DigitPartType GetDigitPart(int digit)
             => digit > 0
