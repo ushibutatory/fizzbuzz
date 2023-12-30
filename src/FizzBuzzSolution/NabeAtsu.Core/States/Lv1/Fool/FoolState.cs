@@ -44,16 +44,11 @@ namespace NabeAtsu.Core.States.Lv1.Fool
                         // 1桁分の数字を取得
                         var number = int.Parse(block[i].ToString());
 
-                        // 1桁後ろの数字を取得
-                        var nextNumber = (i + 1 < block.Length)
-                            ? int.Parse(block[i + 1].ToString())
-                            : (int?)null;
-
                         // 数を変換
-                        text.Append(_converter.ToFoolNumber(value, number, nextNumber, digit));
+                        text.Append(_converter.ToFoolNumber(value, number, digit));
 
                         // 桁を変換
-                        text.Append(_converter.ToFoolDigit(value, number, nextNumber, digit));
+                        text.Append(_converter.ToFoolDigit(value, number, digit));
 
                         digit--;
                     }
