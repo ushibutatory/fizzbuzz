@@ -10,7 +10,7 @@ namespace NabeAtsu.Core.States.Lv1.Fool
     {
         public delegate string ConvertNumberDelegate(BigInteger value, int number, int digit);
 
-        public delegate string ConvertDigitPartDelegate(BigInteger value, int number, int digit);
+        public delegate string ConvertDigitPartDelegate(BigInteger value, int number, int? nextNumber, int digit);
 
         private FoolConverter(Builder builder)
         {
@@ -26,9 +26,10 @@ namespace NabeAtsu.Core.States.Lv1.Fool
         /// </summary>
         /// <param name="value">元の数値</param>
         /// <param name="number">変換対象の数値</param>
+        /// <param name="nextNumber">変換対象の次の桁の数値</param>
         /// <param name="digit">何桁目か</param>
         /// <returns></returns>
-        public string ToFoolNumber(BigInteger value, int number, int digit)
+        public string ToFoolNumber(BigInteger value, int number, int? nextNumber, int digit)
         {
             var result = "";
             if (digit == 1)
@@ -81,14 +82,15 @@ namespace NabeAtsu.Core.States.Lv1.Fool
         /// </summary>
         /// <param name="value">元の数値</param>
         /// <param name="number">変換対象の数値</param>
+        /// <param name="nextNumber">変換対象の次の数値</param>
         /// <param name="digit">何桁目か</param>
         /// <returns></returns>
-        public string ToFoolDigit(BigInteger value, int number, int digit) => (Consts.GetDigitPart(digit)) switch
+        public string ToFoolDigit(BigInteger value, int number, int? nextNumber, int digit) => (Consts.GetDigitPart(digit)) switch
         {
-            Consts.DigitPartType.One => ConvertDigitPart_One(value, number, digit),
-            Consts.DigitPartType.Ten => ConvertDigitPart_Ten(value, number, digit),
-            Consts.DigitPartType.Hundred => ConvertDigitPart_Hundred(value, number, digit),
-            Consts.DigitPartType.Thousand => ConvertDigitPart_Thousand(value, number, digit),
+            Consts.DigitPartType.One => ConvertDigitPart_One(value, number, nextNumber, digit),
+            Consts.DigitPartType.Ten => ConvertDigitPart_Ten(value, number, nextNumber, digit),
+            Consts.DigitPartType.Hundred => ConvertDigitPart_Hundred(value, number, nextNumber, digit),
+            Consts.DigitPartType.Thousand => ConvertDigitPart_Thousand(value, number, nextNumber, digit),
             _ => "",
         };
 
@@ -139,7 +141,7 @@ namespace NabeAtsu.Core.States.Lv1.Fool
                 };
             };
 
-            public ConvertDigitPartDelegate ConvertDigitPart_One = (value, number, digit) =>
+            public ConvertDigitPartDelegate ConvertDigitPart_One = (value, number, nextNumber, digit) =>
             {
                 return (Consts.GetDigitScale(digit)) switch
                 {
@@ -165,7 +167,7 @@ namespace NabeAtsu.Core.States.Lv1.Fool
                 };
             };
 
-            public ConvertDigitPartDelegate ConvertDigitPart_Ten = (value, number, digit) =>
+            public ConvertDigitPartDelegate ConvertDigitPart_Ten = (value, number, nextNumber, digit) =>
             {
                 return number switch
                 {
@@ -174,7 +176,7 @@ namespace NabeAtsu.Core.States.Lv1.Fool
                 };
             };
 
-            public ConvertDigitPartDelegate ConvertDigitPart_Hundred = (value, number, digit) =>
+            public ConvertDigitPartDelegate ConvertDigitPart_Hundred = (value, number, nextNumber, digit) =>
             {
                 switch (number)
                 {
@@ -190,7 +192,7 @@ namespace NabeAtsu.Core.States.Lv1.Fool
                 };
             };
 
-            public ConvertDigitPartDelegate ConvertDigitPart_Thousand = (value, number, digit) =>
+            public ConvertDigitPartDelegate ConvertDigitPart_Thousand = (value, number, nextNumber, digit) =>
             {
                 return number switch
                 {

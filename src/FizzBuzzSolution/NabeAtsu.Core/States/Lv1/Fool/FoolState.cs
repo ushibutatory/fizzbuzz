@@ -39,16 +39,21 @@ namespace NabeAtsu.Core.States.Lv1.Fool
                 else
                 {
                     // 1文字ずつ変換
-                    foreach (var @char in block)
+                    for (int i = 0; i < block.Length; i++)
                     {
                         // 1桁分の数字を取得
-                        var number = int.Parse(@char.ToString());
+                        var number = int.Parse(block[i].ToString());
+
+                        // 1桁後ろの数字を取得
+                        var nextNumber = (i + 1 < block.Length)
+                            ? int.Parse(block[i + 1].ToString())
+                            : (int?)null;
 
                         // 数を変換
-                        text.Append(_converter.ToFoolNumber(value, number, digit));
+                        text.Append(_converter.ToFoolNumber(value, number, nextNumber, digit));
 
                         // 桁を変換
-                        text.Append(_converter.ToFoolDigit(value, number, digit));
+                        text.Append(_converter.ToFoolDigit(value, number, nextNumber, digit));
 
                         digit--;
                     }
