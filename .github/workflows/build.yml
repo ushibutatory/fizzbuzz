@@ -13,5 +13,5 @@ jobs:
       solution_dir: /src/FizzBuzzSolution
       with_nuget: true
     secrets:
-      NUGET_USER: ${{ secrets.NUGET_USER }}
-      NUGET_PASS: ${{ secrets.NUGET_PASS }}
+      nuget_user: ${{ secrets.NUGET_USER }}
+      nuget_pass: ${{ secrets.NUGET_PASS }}
