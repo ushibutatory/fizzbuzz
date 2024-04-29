@@ -47,7 +47,7 @@ namespace NabeAtsu.Core.States.Lv2.FoolDog
                     _ => "",
                 };
 
-                converter.ConvertDigitPart_One = (value, number, digit) =>
+                converter.ConvertDigitPart_One = (value, number, nextNumber, digit) =>
                 {
                     return (Consts.GetDigitScale(digit)) switch
                     {
@@ -73,7 +73,7 @@ namespace NabeAtsu.Core.States.Lv2.FoolDog
                     };
                 };
 
-                converter.ConvertDigitPart_Ten = (value, number, digit) =>
+                converter.ConvertDigitPart_Ten = (value, number, nextNumber, digit) =>
                 {
                     return number switch
                     {
@@ -81,21 +81,21 @@ namespace NabeAtsu.Core.States.Lv2.FoolDog
                         _ => Consts.GetDigitScale(digit) switch
                         {
                             Consts.DigitScaleType.一 => IsLast(value, digit) ? "じゅゎぉーん！" : "じゅう",
-                            _ => foolConverter.ConvertDigitPart_Ten(value, number, digit),
+                            _ => foolConverter.ConvertDigitPart_Ten(value, number, nextNumber, digit),
                         },
                     };
                 };
 
-                converter.ConvertDigitPart_Hundred = (value, number, digit) =>
+                converter.ConvertDigitPart_Hundred = (value, number, nextNumber, digit) =>
                 {
-                    var prefix = foolConverter.ConvertDigitPart_Hundred(value, number, digit);
+                    var prefix = foolConverter.ConvertDigitPart_Hundred(value, number, nextNumber, digit);
 
                     return string.IsNullOrEmpty(prefix)
                         ? ""
                         : IsLast(value, digit) && digit < 4 ? $"{prefix}ゎぉーん！" : prefix;
                 };
 
-                converter.ConvertDigitPart_Thousand = (value, number, digit) =>
+                converter.ConvertDigitPart_Thousand = (value, number, nextNumber, digit) =>
                 {
                     return number switch
                     {
