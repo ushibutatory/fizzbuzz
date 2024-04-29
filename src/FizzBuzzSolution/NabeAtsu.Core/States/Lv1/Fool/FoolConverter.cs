@@ -1,5 +1,4 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
 
 namespace NabeAtsu.Core.States.Lv1.Fool
 {
@@ -10,7 +9,7 @@ namespace NabeAtsu.Core.States.Lv1.Fool
     {
         public delegate string ConvertNumberDelegate(BigInteger value, int number, int digit);
 
-        public delegate string ConvertDigitPartDelegate(BigInteger value, int number, int digit);
+        public delegate string ConvertDigitPartDelegate(BigInteger value, int number, int? nextNumber, int digit);
 
         private FoolConverter(Builder builder)
         {
@@ -28,7 +27,7 @@ namespace NabeAtsu.Core.States.Lv1.Fool
         /// <param name="number">変換対象の数値</param>
         /// <param name="digit">何桁目か</param>
         /// <returns></returns>
-        public string ToFoolNumber(BigInteger value, int number, int digit)
+        public string ToFoolNumber(BigInteger value, int number, int? nextNumber, int digit)
         {
             var result = "";
             if (digit == 1)
@@ -47,7 +46,7 @@ namespace NabeAtsu.Core.States.Lv1.Fool
                     case 1:
                         return digitPart switch
                         {
-                            Consts.DigitPartType.One => _IsSokuon(digit) ? "いっ" : "いち",
+                            Consts.DigitPartType.One => _IsSokuon(digit, nextNumber) ? "いっ" : "いち",
                             _ => "",
                         };
                     case 2: return "に";
@@ -83,12 +82,12 @@ namespace NabeAtsu.Core.States.Lv1.Fool
         /// <param name="number">変換対象の数値</param>
         /// <param name="digit">何桁目か</param>
         /// <returns></returns>
-        public string ToFoolDigit(BigInteger value, int number, int digit) => (Consts.GetDigitPart(digit)) switch
+        public string ToFoolDigit(BigInteger value, int number, int? nextNumber, int digit) => (Consts.GetDigitPart(digit)) switch
         {
-            Consts.DigitPartType.One => ConvertDigitPart_One(value, number, digit),
-            Consts.DigitPartType.Ten => ConvertDigitPart_Ten(value, number, digit),
-            Consts.DigitPartType.Hundred => ConvertDigitPart_Hundred(value, number, digit),
-            Consts.DigitPartType.Thousand => ConvertDigitPart_Thousand(value, number, digit),
+            Consts.DigitPartType.One => ConvertDigitPart_One(value, number, nextNumber, digit),
+            Consts.DigitPartType.Ten => ConvertDigitPart_Ten(value, number, nextNumber, digit),
+            Consts.DigitPartType.Hundred => ConvertDigitPart_Hundred(value, number, nextNumber, digit),
+            Consts.DigitPartType.Thousand => ConvertDigitPart_Thousand(value, number, nextNumber, digit),
             _ => "",
         };
 
@@ -103,7 +102,7 @@ namespace NabeAtsu.Core.States.Lv1.Fool
         /// </summary>
         /// <param name="digit"></param>
         /// <returns></returns>
-        private static bool _IsSokuon(int digit)
+        private static bool _IsSokuon(int digit, int? nextNumber)
         {
             switch (Consts.GetDigitScale(digit))
             {
@@ -113,7 +112,7 @@ namespace NabeAtsu.Core.States.Lv1.Fool
                 case Consts.DigitScaleType.澗:
                 case Consts.DigitScaleType.正:
                 case Consts.DigitScaleType.載:
-                    return true;
+                    return !nextNumber.HasValue || nextNumber.Value == 0;
                 default:
                     return false;
             }
@@ -139,7 +138,7 @@ namespace NabeAtsu.Core.States.Lv1.Fool
                 };
             };
 
-            public ConvertDigitPartDelegate ConvertDigitPart_One = (value, number, digit) =>
+            public ConvertDigitPartDelegate ConvertDigitPart_One = (value, number, nextNumber, digit) =>
             {
                 return (Consts.GetDigitScale(digit)) switch
                 {
@@ -165,32 +164,32 @@ namespace NabeAtsu.Core.States.Lv1.Fool
                 };
             };
 
-            public ConvertDigitPartDelegate ConvertDigitPart_Ten = (value, number, digit) =>
+            public ConvertDigitPartDelegate ConvertDigitPart_Ten = (value, number, nextNumber, digit) =>
             {
                 return number switch
                 {
                     0 => "",
-                    _ => _IsSokuon(digit) ? "じゅっ" : "じゅう",
+                    _ => _IsSokuon(digit, nextNumber) ? "じゅっ" : "じゅう",
                 };
             };
 
-            public ConvertDigitPartDelegate ConvertDigitPart_Hundred = (value, number, digit) =>
+            public ConvertDigitPartDelegate ConvertDigitPart_Hundred = (value, number, nextNumber, digit) =>
             {
                 switch (number)
                 {
                     case 0:
                         return "";
                     case 3:
-                        return _IsSokuon(digit) ? "びゃっ" : "びゃく";
+                        return _IsSokuon(digit, nextNumber) ? "びゃっ" : "びゃく";
                     case 6:
                     case 8:
-                        return _IsSokuon(digit) ? "ぴゃっ" : "ぴゃく";
+                        return _IsSokuon(digit, nextNumber) ? "ぴゃっ" : "ぴゃく";
                     default:
-                        return _IsSokuon(digit) ? "ひゃっ" : "ひゃく";
+                        return _IsSokuon(digit, nextNumber) ? "ひゃっ" : "ひゃく";
                 };
             };
 
-            public ConvertDigitPartDelegate ConvertDigitPart_Thousand = (value, number, digit) =>
+            public ConvertDigitPartDelegate ConvertDigitPart_Thousand = (value, number, nextNumber, digit) =>
             {
                 return number switch
                 {

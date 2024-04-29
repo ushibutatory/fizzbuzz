@@ -32,10 +32,14 @@ namespace NabeAtsu.Core
         /// <param name="digit">桁数</param>
         /// <returns>区切り種別</returns>
         /// <remarks>
-        /// 例: 10桁の数値の場合
-        ///  digit = 10
-        ///  → 余り 2
-        ///  → DigitPartType.Ten を返す
+        /// 例: 9桁の数値（digit = 9）の場合 ...
+        ///     x億なので DigitPartType.One を返す
+        /// <br/>
+        /// 例: 10桁の数値（digit = 10）の場合 ...
+        ///     xx億なので DigitPartType.Ten を返す
+        /// <br/>
+        /// 例: 11桁の数値（digit = 11）の場合 ...
+        ///     xxx億なので DigitPartType.Hundred を返す
         /// </remarks>
         public static DigitPartType GetDigitPart(int digit)
             => digit > 0
@@ -74,11 +78,14 @@ namespace NabeAtsu.Core
         /// <param name="digit">桁数</param>
         /// <returns>単位</returns>
         /// <remarks>
-        /// 数字列を4桁ごとで割った商で判別する。
-        /// 例: 10桁の数値の場合
-        ///  digit = 10
-        ///  → 商 2
-        ///  → '億' を返す
+        /// 例: 10桁の数値（digit = 10）の場合
+        ///     '億' を返す
+        /// <br/>
+        /// 例: 11桁の数値（digit = 11）の場合
+        ///     '億' を返す
+        /// <br/>
+        /// 例: 13桁の数値（digit = 13）の場合
+        ///     '兆' を返す
         /// </remarks>
         public static DigitScaleType GetDigitScale(int digit)
             => digit > 0

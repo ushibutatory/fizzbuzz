@@ -28,7 +28,8 @@ public class Function
             return services.BuildServiceProvider();
         })();
 
-        var logger = provider.GetService<ILogger<Function>>();
+        var logger = provider.GetService<ILogger<Function>>()
+            ?? throw new NullReferenceException("logger is null.");
         logger.LogDebug("APIGatewayProxyRequest: {request}", JsonSerializer.Serialize(request));
         logger.LogDebug("ILambdaContext: {context}", JsonSerializer.Serialize(context));
 

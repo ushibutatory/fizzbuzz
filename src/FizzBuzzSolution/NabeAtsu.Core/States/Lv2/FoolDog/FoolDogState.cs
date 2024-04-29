@@ -1,6 +1,5 @@
 ﻿using NabeAtsu.Core.States.Lv1.Dog;
 using NabeAtsu.Core.States.Lv1.Fool;
-using System;
 using System.Numerics;
 
 namespace NabeAtsu.Core.States.Lv2.FoolDog
@@ -23,6 +22,8 @@ namespace NabeAtsu.Core.States.Lv2.FoolDog
         private readonly IState _Fool = new FoolState.Builder()
             .Setup((converter) =>
             {
+                var foolConverter = new FoolConverter.Builder();
+
                 static bool IsLast(BigInteger value, int digit)
                 {
                     return value.ToString()
@@ -46,7 +47,7 @@ namespace NabeAtsu.Core.States.Lv2.FoolDog
                     _ => "",
                 };
 
-                converter.ConvertDigitPart_One = (value, number, digit) =>
+                converter.ConvertDigitPart_One = (value, number, nextNumber, digit) =>
                 {
                     return (Consts.GetDigitScale(digit)) switch
                     {
@@ -72,54 +73,29 @@ namespace NabeAtsu.Core.States.Lv2.FoolDog
                     };
                 };
 
-                converter.ConvertDigitPart_Ten = (value, number, digit) =>
+                converter.ConvertDigitPart_Ten = (value, number, nextNumber, digit) =>
                 {
-                    switch (number)
+                    return number switch
                     {
-                        case 0:
-                            return "";
-                        default:
-                            switch (Consts.GetDigitScale(digit))
-                            {
-                                case Consts.DigitScaleType.一:
-                                    return IsLast(value, digit) ? "じゅゎぉーん！" : "じゅう";
-                                case Consts.DigitScaleType.兆:
-                                case Consts.DigitScaleType.京:
-                                case Consts.DigitScaleType.溝:
-                                case Consts.DigitScaleType.澗:
-                                case Consts.DigitScaleType.正:
-                                case Consts.DigitScaleType.載:
-                                    return "じゅっ";
-                                default:
-                                    return "じゅう";
-                            }
-                    }
+                        0 => "",
+                        _ => Consts.GetDigitScale(digit) switch
+                        {
+                            Consts.DigitScaleType.一 => IsLast(value, digit) ? "じゅゎぉーん！" : "じゅう",
+                            _ => foolConverter.ConvertDigitPart_Ten(value, number, nextNumber, digit),
+                        },
+                    };
                 };
 
-                converter.ConvertDigitPart_Hundred = (value, number, digit) =>
+                converter.ConvertDigitPart_Hundred = (value, number, nextNumber, digit) =>
                 {
-                    var prefix = new Func<string>(() =>
-                    {
-                        switch (number)
-                        {
-                            case 0:
-                                return "";
-                            case 3:
-                                return "びゃく";
-                            case 6:
-                            case 8:
-                                return "ぴゃく";
-                            default:
-                                return "ひゃく";
-                        }
-                    })();
+                    var prefix = foolConverter.ConvertDigitPart_Hundred(value, number, nextNumber, digit);
 
                     return string.IsNullOrEmpty(prefix)
                         ? ""
                         : IsLast(value, digit) && digit < 4 ? $"{prefix}ゎぉーん！" : prefix;
                 };
 
-                converter.ConvertDigitPart_Thousand = (value, number, digit) =>
+                converter.ConvertDigitPart_Thousand = (value, number, nextNumber, digit) =>
                 {
                     return number switch
                     {
